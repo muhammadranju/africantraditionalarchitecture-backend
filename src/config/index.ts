@@ -11,7 +11,7 @@ export default {
   bcrypt_salt_rounds: process.env.BCRYPT_SALT_ROUNDS,
   jwt: {
     jwt_secret: process.env.JWT_SECRET,
-    jwt_expire_in: process.env.JWT_EXPIRE_IN,
+    jwt_expire_in: process.env.JWT_EXPIRE_IN || '365d',
   },
   email: {
     from: process.env.EMAIL_FROM,
