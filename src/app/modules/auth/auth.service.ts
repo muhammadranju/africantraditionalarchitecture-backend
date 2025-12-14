@@ -56,7 +56,19 @@ const loginUserFromDB = async (payload: ILoginData) => {
     config.jwt.jwt_expire_in as SignOptions['expiresIn']
   );
 
-  return { createToken };
+  const user = {
+    name: isExistUser.name,
+    email: isExistUser.email,
+    role: isExistUser.role,
+    image: isExistUser.image,
+    bio: isExistUser.bio,
+    website: isExistUser.website,
+    uploads: isExistUser.uploads,
+    status: isExistUser.status,
+    verified: isExistUser.verified,
+  };
+
+  return { user, createToken };
 };
 
 //forget password
