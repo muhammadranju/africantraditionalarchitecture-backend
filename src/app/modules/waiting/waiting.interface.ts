@@ -1,9 +1,14 @@
 export enum ProfessionalROLES {
-  Builder = 'Builder',
-  Architect = 'Architect',
-  Designer = 'Designer',
-  Student = 'Student',
-  Other = 'Other',
+  builder = 'builder',
+  architect = 'architect',
+  designer = 'designer',
+  student = 'student',
+  other = 'other',
+}
+export enum WaitingStatus {
+  active = 'active',
+  delete = 'delete',
+  suspended = 'suspended',
 }
 
 export interface IWaiting {
@@ -18,5 +23,6 @@ export interface IWaiting {
   image: string;
   bio: string;
   available: boolean;
-  status: string;
+  status: WaitingStatus;
 }
+export interface IWaitingModal extends IWaiting, Document {}

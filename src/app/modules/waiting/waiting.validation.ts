@@ -1,4 +1,5 @@
 import z from 'zod';
+import { ProfessionalROLES } from './waiting.interface';
 
 const WaitingValidation = {
   createWaitingZodSchema: z.object({
@@ -9,15 +10,40 @@ const WaitingValidation = {
       email: z.string({
         required_error: 'Email is required',
       }),
-      phone: z.string({
-        required_error: 'Phone is required',
+      role: z.enum(
+        [
+          ProfessionalROLES.builder,
+          ProfessionalROLES.architect,
+          ProfessionalROLES.designer,
+          ProfessionalROLES.student,
+          ProfessionalROLES.other,
+        ],
+        {
+          required_error: `Role must be one of ${Object.values(
+            ProfessionalROLES
+          )}`,
+        }
+      ),
+      country: z.string({
+        required_error: 'Country is required',
       }),
-      address: z.string({
-        required_error: 'Address is required',
+      about: z.string({
+        required_error: 'About is required',
       }),
-      message: z.string({
-        required_error: 'Message is required',
+      website: z.string().optional(),
+      expertise: z.string({
+        required_error: 'Expertise is required',
       }),
+      experience: z.string({
+        required_error: 'Experience is required',
+      }),
+      image: z.string({
+        required_error: 'Image is required',
+      }),
+      bio: z.string({
+        required_error: 'Bio is required',
+      }),
+      available: z.boolean().optional(),
     }),
   }),
 };

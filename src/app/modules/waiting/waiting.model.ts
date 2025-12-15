@@ -1,7 +1,9 @@
 import { model, Schema } from 'mongoose';
-import { IWaiting, ProfessionalROLES } from './waiting.interface';
-
-interface IWaitingModal extends IWaiting, Document {}
+import {
+  IWaitingModal,
+  ProfessionalROLES,
+  WaitingStatus,
+} from './waiting.interface';
 
 const waitingSchema = new Schema<IWaitingModal>(
   {
@@ -59,11 +61,13 @@ const waitingSchema = new Schema<IWaitingModal>(
 
     status: {
       type: String,
-      enum: ['active', 'delete', 'suspended'],
-      default: 'active',
+      enum: Object.values(WaitingStatus),
+      default: WaitingStatus.active,
     },
   },
   { timestamps: true }
 );
 
-export const User = model<IWaitingModal>('User', waitingSchema);
+const WaitingList = model<IWaitingModal>('WaitingList', waitingSchema);
+
+export default WaitingList;

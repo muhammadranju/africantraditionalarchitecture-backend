@@ -6,7 +6,8 @@ import { Request, Response } from 'express';
 
 const createForum = catchAsync(async (req: Request, res: Response) => {
   const { ...forumData } = req.body;
-  const result = await ForumService.createForumToDB(forumData);
+  const user = req.user;
+  const result = await ForumService.createForumToDB(forumData, user);
   sendResponse(res, {
     success: true,
     statusCode: StatusCodes.OK,

@@ -5,7 +5,7 @@ import multer, { FileFilterCallback } from 'multer';
 import path from 'path';
 import ApiError from '../../errors/ApiError';
 
-const fileUploadHandler = () => {
+const fileUploadHandler = (customName?: string) => {
   //create upload folder
   const baseUploadDir = path.join(process.cwd(), 'uploads');
   if (!fs.existsSync(baseUploadDir)) {
@@ -23,43 +23,50 @@ const fileUploadHandler = () => {
   const storage = multer.diskStorage({
     destination: (req, file, cb) => {
       let uploadDir;
-      switch (file.fieldname) {
-        case 'image':
-        case 'coverImage':
-        case 'images':
-          uploadDir = path.join(baseUploadDir, 'image');
-          break;
-        case 'media':
-        case 'medias':
-          uploadDir = path.join(baseUploadDir, 'media');
-          break;
-        case 'doc':
-        case 'pdfs':
-          uploadDir = path.join(baseUploadDir, 'doc');
-          break;
-        case 'type':
-          if (
-            file.mimetype === 'image/jpeg' ||
-            file.mimetype === 'image/png' ||
-            file.mimetype === 'image/jpg'
-          ) {
+      if (customName) {
+        uploadDir = path.join(baseUploadDir, customName);
+      } else {
+        switch (file.fieldname) {
+          case 'image':
+          case 'coverImage':
+          case 'images':
             uploadDir = path.join(baseUploadDir, 'image');
-          } else if (
-            file.mimetype === 'video/mp4' ||
-            file.mimetype === 'audio/mpeg'
-          ) {
+            break;
+          case 'media':
+          case 'medias':
             uploadDir = path.join(baseUploadDir, 'media');
-          } else if (file.mimetype === 'application/pdf') {
+            break;
+          case 'doc':
+          case 'pdfs':
             uploadDir = path.join(baseUploadDir, 'doc');
-          } else {
+            break;
+          case 'type':
+            if (
+              file.mimetype === 'image/jpeg' ||
+              file.mimetype === 'image/png' ||
+              file.mimetype === 'image/jpg'
+            ) {
+              uploadDir = path.join(baseUploadDir, 'image');
+            } else if (
+              file.mimetype === 'video/mp4' ||
+              file.mimetype === 'audio/mpeg'
+            ) {
+              uploadDir = path.join(baseUploadDir, 'media');
+            } else if (file.mimetype === 'application/pdf') {
+              uploadDir = path.join(baseUploadDir, 'doc');
+            } else {
+              throw new ApiError(
+                StatusCodes.BAD_REQUEST,
+                'File is not supported'
+              );
+            }
+            break;
+          default:
             throw new ApiError(
               StatusCodes.BAD_REQUEST,
               'File is not supported'
             );
-          }
-          break;
-        default:
-          throw new ApiError(StatusCodes.BAD_REQUEST, 'File is not supported');
+        }
       }
       createDir(uploadDir);
       cb(null, uploadDir);
