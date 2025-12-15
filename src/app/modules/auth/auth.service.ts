@@ -37,7 +37,13 @@ const loginUserFromDB = async (payload: ILoginData) => {
   if (isExistUser.status === 'delete') {
     throw new ApiError(
       StatusCodes.BAD_REQUEST,
-      'You don’t have permission to access this content.It looks like your account has been deactivated.'
+      'You don’t have permission to access this content. It looks like your account has been deactivated.'
+    );
+  }
+  if (isExistUser.status === 'suspended') {
+    throw new ApiError(
+      StatusCodes.BAD_REQUEST,
+      'You don’t have permission to access this content. It looks like your account has been suspended.'
     );
   }
 

@@ -12,7 +12,7 @@ export type IUser = {
   bio?: string;
   website?: string;
   uploads?: string[];
-  status: 'active' | 'delete';
+  status: 'active' | 'delete' | 'suspended';
   verified: boolean;
   authentication?: {
     isResetPassword: boolean;
