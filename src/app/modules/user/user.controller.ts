@@ -9,7 +9,7 @@ const createUser = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const { ...userData } = req.body;
     const result = await UserService.createUserToDB(userData);
-
+    console.log('result', result);
     sendResponse(res, {
       success: true,
       statusCode: StatusCodes.OK,
@@ -52,4 +52,47 @@ const updateProfile = catchAsync(
   }
 );
 
-export const UserController = { createUser, getUserProfile, updateProfile };
+const getAllUsers = catchAsync(async (req: Request, res: Response) => {
+  const result = await UserService.getAllUsersFromDB();
+
+  sendResponse(res, {
+    success: true,
+    statusCode: StatusCodes.OK,
+    message: 'Users retrieved successfully',
+    data: result,
+  });
+});
+
+const updateStatus = catchAsync(async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const { status } = req.body;
+  const result = await UserService.updateStatusToDB(id, status);
+
+  sendResponse(res, {
+    success: true,
+    statusCode: StatusCodes.OK,
+    message: 'User status updated successfully',
+    data: result,
+  });
+});
+
+const deleteUser = catchAsync(async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const result = await UserService.deleteUserToDB(id);
+
+  sendResponse(res, {
+    success: true,
+    statusCode: StatusCodes.OK,
+    message: 'User deleted successfully',
+    data: result,
+  });
+});
+
+export const UserController = {
+  createUser,
+  getUserProfile,
+  updateProfile,
+  getAllUsers,
+  updateStatus,
+  deleteUser,
+};

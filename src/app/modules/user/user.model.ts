@@ -47,19 +47,18 @@ const userSchema = new Schema<IUser, UserModal>(
       {
         type: String,
         default: '',
-      }
+      },
     ],
 
     status: {
       type: String,
-      enum: ['active', 'delete',"suspended"],
+      enum: ['active', 'delete', 'suspended'],
       default: 'active',
     },
 
-
     verified: {
       type: Boolean,
-      default: false,
+      default: true,
     },
     authentication: {
       type: {

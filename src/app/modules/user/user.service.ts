@@ -17,25 +17,25 @@ const createUserToDB = async (payload: Partial<IUser>): Promise<IUser> => {
     throw new ApiError(StatusCodes.BAD_REQUEST, 'Failed to create user');
   }
 
-  //send email
-  const otp = generateOTP();
-  const values = {
-    name: createUser.name,
-    otp: otp,
-    email: createUser.email!,
-  };
-  const createAccountTemplate = emailTemplate.createAccount(values);
-  emailHelper.sendEmail(createAccountTemplate);
+  // //send email
+  // const otp = generateOTP();
+  // const values = {
+  //   name: createUser.name,
+  //   otp: otp,
+  //   email: createUser.email!,
+  // };
+  // const createAccountTemplate = emailTemplate.createAccount(values);
+  // emailHelper.sendEmail(createAccountTemplate);
 
-  //save to DB
-  const authentication = {
-    oneTimeCode: otp,
-    expireAt: new Date(Date.now() + 3 * 60000),
-  };
-  await User.findOneAndUpdate(
-    { _id: createUser._id },
-    { $set: { authentication } }
-  );
+  // //save to DB
+  // const authentication = {
+  //   oneTimeCode: otp,
+  //   expireAt: new Date(Date.now() + 3 * 60000),
+  // };
+  // await User.findOneAndUpdate(
+  //   { _id: createUser._id },
+  //   { $set: { authentication } }
+  // );
 
   return createUser;
 };
@@ -74,8 +74,33 @@ const updateProfileToDB = async (
   return updateDoc;
 };
 
+const getAllUsersFromDB = async (): Promise<IUser[]> => {
+  const result = await User.find();
+  return result;
+};
+
+const updateStatusToDB = async (
+  id: string,
+  status: string
+): Promise<IUser | null> => {
+  const result = await User.findByIdAndUpdate(
+    id,
+    { status: status },
+    { new: true }
+  );
+  return result;
+};
+
+const deleteUserToDB = async (id: string): Promise<IUser | null> => {
+  const result = await User.findByIdAndDelete(id);
+  return result;
+};
+
 export const UserService = {
   createUserToDB,
   getUserProfileFromDB,
   updateProfileToDB,
+  getAllUsersFromDB,
+  updateStatusToDB,
+  deleteUserToDB,
 };
