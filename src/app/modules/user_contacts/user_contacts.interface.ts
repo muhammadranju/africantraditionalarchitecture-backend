@@ -3,4 +3,5 @@ export interface IUserContact {
   email: string;
   phone: string;
   address: string;
+  message: string;
 }

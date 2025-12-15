@@ -9,6 +9,7 @@ const UserContactSchema = new mongoose.Schema<IUserContact>(
     },
     email: {
       type: String,
+      lowercase: true,
       required: true,
     },
     phone: {
@@ -16,6 +17,10 @@ const UserContactSchema = new mongoose.Schema<IUserContact>(
       required: true,
     },
     address: {
+      type: String,
+      required: true,
+    },
+    message: {
       type: String,
       required: true,
     },
