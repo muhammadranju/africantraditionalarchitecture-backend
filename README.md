@@ -1,114 +1,136 @@
-# Project Name
+# 🌍 African Traditional Architecture Backend API
 
-This is a template project for backend development using Typescript, Node.js, Express, Mongoose, Bcrypt, JWT, NodeMailer, Multer, ESLint, and Prettier. The aim is to reduce setup time for new backend projects.
+**African Traditional Architecture Backend** is a **modern, scalable backend API** built with **TypeScript, Node.js, Express, and MongoDB** — designed to power projects related to _African traditional architecture_ (e.g., digital archives, educational platforms, cultural heritage apps, etc.). This boilerplate accelerates backend development with ready-to-use features such as authentication, file handling, logging, and secure APIs.
 
-## Features
+> 💡 Although this repository currently has a basic template README, this version expands on purpose, features, and usage — making it easier for contributors and users to understand and work with the project. ([GitHub][1])
 
-- **Authentication API:** Complete authentication system using JWT for secure token-based authentication and bcrypt for password hashing.
-- **File Upload:** Implemented using Multer with efficient file handling and short-term storage.
-- **Data Validation:** Robust data validation using Zod and Mongoose schemas.
-- **Code Quality:** Ensured code readability and quality with ESLint and Prettier.
-- **Email Service:** Sending emails through NodeMailer.
-- **File Handling:** Efficient file deletion using `fs.unlink`.
-- **Environment Configuration:** Easy configuration using a `.env` file.
-- **Logging:** Logging with Winston and file rotation using DailyRotateFile.
-- **API Request Logging:** Logging API requests using Morgan.
+---
 
-## Tech Stack
+## 🧱 Features
 
-- Typescript
-- Node.js
-- Express
-- Mongoose
-- Bcrypt
-- JWT
-- NodeMailer
-- Multer
-- ESLint
-- Prettier
-- Winston
-- Daily-winston-rotate-file
-- Morgen
-- Socket
+This backend comes with built-in support for:
 
-## Getting Started
+- 🔐 **JWT Authentication** — secure token-based login and authorization
+- 🔒 **Password Hashing** with Bcrypt
+- 📁 **File Uploads** using Multer
+- ✉️ **Email Sending** via NodeMailer
+- 📜 **Zod + Mongoose Schema Validation**
+- 🛠️ **Logging** using Winston with daily rotation
+- 📊 **API Request Logging** with Morgan
+- 🧹 **Code Quality** using ESLint and Prettier
+- ⚙️ **Environment Config Support** (.env) ([GitHub][1])
 
-Follow these steps to set up and run the project locally.
+This setup helps developers get started quickly without worrying about repetitive configurations.
 
-### Prerequisites
+---
 
-Ensure you have the following installed:
+## 🧠 Technologies Used
 
-- Node.js
-- npm or yarn
+The project stack includes:
 
-### Installation
+- 💻 **TypeScript** — typed JavaScript for safer code
+- 🚀 **Node.js & Express** — backend server framework
+- 🗄️ **MongoDB + Mongoose** — database and schema management
+- 🔐 **Bcrypt & JWT** — security and authentication
+- 📦 **Multer** — file upload handling
+- 📬 **NodeMailer** — email support
+- 🧰 **ESLint + Prettier** — code quality & formatting
+- 🧾 **Winston + DailyRotateFile** — structured log files
+- 📊 **Morgan** — HTTP request logger ([GitHub][1])
 
-1. **Clone the repository:**
+---
 
-   ```bash
-   git clone https://github.com/yourusername/your-repository.git
-   cd your-repository
-   ```
+## 🚀 Quick Start
 
-2. **Install dependencies:**
+### 1. Clone the repository
 
-   Using npm:
+```bash
+git clone https://github.com/muhammadranju/africantraditionalarchitecture-backend.git
+cd africantraditionalarchitecture-backend
+```
 
-   ```bash
-   npm install
-   ```
+### 2. Install dependencies
 
-   Using yarn:
+```bash
+npm install
+# or
+bun install
+```
 
-   ```bash
-   yarn install
-   ```
+### 3. Setup environment variables
 
-3. **Create a `.env` file:**
+Create a `.env` file in the root with values like:
 
-   In the root directory of the project, create a `.env` file and add the following variables. Adjust the values according to your setup.
+```
+NODE_ENV=development
+DATABASE_URL=mongodb://127.0.0.1:27017/your_db
+PORT=5000
 
-   ```env
-   # Basic
-   NODE_ENV=development
-   DATABASE_URL=mongodb://127.0.0.1:27017/project_name
-   IP_ADDRESS=10.10.7.101
-   PORT=5000
-   #Bcrypt
-   BCRYPT_SALT_ROUNDS=12
-   #JWT
-   JWT_SECRET=jwt_secret
-   #Email
-   EMAIL_FROM=email@gmail.com
-   EMAIL_USER=email@gmail.com
-   EMAIL_PASS=mkqcfjeqloothyax
-   EMAIL_PORT=587
-   EMAIL_HOST=smtp.gmail.com
-   SUPER_ADMIN_EMAIL=admin@gmail.com
-   SUPER_ADMIN_PASSWORD=12345678
-   ```
+JWT_SECRET=your_jwt_secret
+BCRYPT_SALT_ROUNDS=10
 
-4. **Run the project:**
+EMAIL_HOST=smtp.gmail.com
+EMAIL_USER=your_email@gmail.com
+EMAIL_PASS=your_email_app_pass
+```
 
-   Using npm:
+### 4. Run the development server
 
-   ```bash
-   npm run dev
-   ```
+```bash
+npm run dev
+# or
+bun dev
+```
 
-   Using yarn:
+---
 
-   ```bash
-   yarn run dev
-   ```
+## 🧪 Testing
 
-### Running the Tests
-
-Explain how to run the automated tests for this system.
+> 🔧 _Example test command — adapt if you add tests to the project later_
 
 ```bash
 npm test
+# or
+bun test
 ```
 
-# TS-Template
+Add automated tests to validate endpoints, models, and authentication behavior.
+
+---
+
+## 📁 Folder Structure
+
+Typically the project follows this layout:
+
+```
+├── src/
+│   ├── controllers/
+│   ├── models/
+│   ├── routes/
+│   ├── middlewares/
+│   ├── services/
+│   └── utils/
+├── .env
+├── package.json
+├── tsconfig.json
+├── README.md
+```
+
+---
+
+## 🤝 Contributing
+
+This project welcomes contributions! Please:
+
+- ⭐ Star the repo if you find it useful
+- 🍴 Fork the repository
+- 📝 Make improvements
+- 🔀 Submit a pull request
+
+Feel free to open issues for bugs or feature discussions.
+
+---
+
+## 📜 License
+
+Include your preferred open source license (e.g., MIT License).
