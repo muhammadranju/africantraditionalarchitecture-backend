@@ -1,11 +1,11 @@
 import express from 'express';
 import { AuthRoutes } from '../app/modules/auth/auth.route';
-import { UserRoutes } from '../app/modules/user/user.route';
-import { ContentRoutes } from '../app/modules/contents/contents.route';
 import { CommentRoutes } from '../app/modules/comments/comments.route';
-import { WaitingListRoutes } from '../app/modules/waiting/waiting.route';
+import { ContentRoutes } from '../app/modules/contents/contents.route';
 import { ForumRoutes } from '../app/modules/forums/forums.route';
+import { UserRoutes } from '../app/modules/user/user.route';
 import { UserContactRoutes } from '../app/modules/user_contacts/user_contacts.route';
+import { WaitingListRoutes } from '../app/modules/waiting/waiting.route';
 const router = express.Router();
 
 const apiRoutes = [
@@ -35,7 +35,7 @@ const apiRoutes = [
     route: ForumRoutes,
   },
   {
-    path: '/contact',
+    path: '/user-contacts',
     route: UserContactRoutes,
   },
 ];

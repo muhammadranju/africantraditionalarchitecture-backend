@@ -25,13 +25,38 @@ const fileUploadHandler = () => {
       let uploadDir;
       switch (file.fieldname) {
         case 'image':
+        case 'coverImage':
+        case 'images':
           uploadDir = path.join(baseUploadDir, 'image');
           break;
         case 'media':
+        case 'medias':
           uploadDir = path.join(baseUploadDir, 'media');
           break;
         case 'doc':
+        case 'pdfs':
           uploadDir = path.join(baseUploadDir, 'doc');
+          break;
+        case 'type':
+          if (
+            file.mimetype === 'image/jpeg' ||
+            file.mimetype === 'image/png' ||
+            file.mimetype === 'image/jpg'
+          ) {
+            uploadDir = path.join(baseUploadDir, 'image');
+          } else if (
+            file.mimetype === 'video/mp4' ||
+            file.mimetype === 'audio/mpeg'
+          ) {
+            uploadDir = path.join(baseUploadDir, 'media');
+          } else if (file.mimetype === 'application/pdf') {
+            uploadDir = path.join(baseUploadDir, 'doc');
+          } else {
+            throw new ApiError(
+              StatusCodes.BAD_REQUEST,
+              'File is not supported'
+            );
+          }
           break;
         default:
           throw new ApiError(StatusCodes.BAD_REQUEST, 'File is not supported');
@@ -55,7 +80,11 @@ const fileUploadHandler = () => {
 
   //file filter
   const filterFilter = (req: Request, file: any, cb: FileFilterCallback) => {
-    if (file.fieldname === 'image') {
+    if (
+      file.fieldname === 'image' ||
+      file.fieldname === 'coverImage' ||
+      file.fieldname === 'images'
+    ) {
       if (
         file.mimetype === 'image/jpeg' ||
         file.mimetype === 'image/png' ||
@@ -70,7 +99,7 @@ const fileUploadHandler = () => {
           )
         );
       }
-    } else if (file.fieldname === 'media') {
+    } else if (file.fieldname === 'media' || file.fieldname === 'medias') {
       if (file.mimetype === 'video/mp4' || file.mimetype === 'audio/mpeg') {
         cb(null, true);
       } else {
@@ -81,7 +110,7 @@ const fileUploadHandler = () => {
           )
         );
       }
-    } else if (file.fieldname === 'doc') {
+    } else if (file.fieldname === 'doc' || file.fieldname === 'pdfs') {
       if (file.mimetype === 'application/pdf') {
         cb(null, true);
       } else {
@@ -99,6 +128,10 @@ const fileUploadHandler = () => {
     { name: 'image', maxCount: 3 },
     { name: 'media', maxCount: 3 },
     { name: 'doc', maxCount: 3 },
+    { name: 'coverImage', maxCount: 1 },
+    { name: 'images', maxCount: 5 },
+    { name: 'medias', maxCount: 5 },
+    { name: 'pdfs', maxCount: 5 },
   ]);
   return upload;
 };
