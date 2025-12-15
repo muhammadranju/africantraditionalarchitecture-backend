@@ -1,23 +1,22 @@
 import z from 'zod';
+import { CategoryEnum } from './forums.interface';
 
 const ForumValidation = {
   createForumZodSchema: z.object({
     body: z.object({
-      name: z.string({
-        required_error: 'Name is required',
+      title: z.string({
+        required_error: 'Title is required',
       }),
-      email: z.string({
-        required_error: 'Email is required',
+      description: z.string({
+        required_error: 'Description is required',
       }),
-      phone: z.string({
-        required_error: 'Phone is required',
-      }),
-      address: z.string({
-        required_error: 'Address is required',
-      }),
-      message: z.string({
-        required_error: 'Message is required',
-      }),
+      category: z.enum([
+        CategoryEnum.cultural,
+        CategoryEnum.rebuilding,
+        CategoryEnum.materials,
+        CategoryEnum.interactive,
+        CategoryEnum.community,
+      ] as const),
     }),
   }),
 };

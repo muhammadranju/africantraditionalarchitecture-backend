@@ -20,14 +20,12 @@ const ForumSchema = new mongoose.Schema<IForum>(
     comments: [
       {
         type: String,
-        required: true,
       },
     ],
     status: {
       type: String,
       enum: Object.values(StatusEnum),
       default: StatusEnum.approved,
-      required: true,
     },
   },
   {
