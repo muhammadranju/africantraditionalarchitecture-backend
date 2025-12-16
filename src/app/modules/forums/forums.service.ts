@@ -12,7 +12,15 @@ const createForumToDB = async (forumData: IForum, user: any) => {
 };
 
 const getAllForumsFromDB = async () => {
-  const result = await Forum.find();
+  const result = await Forum.find().populate('owner', 'name role email image');
+  return result;
+};
+
+const getForumByIdFromDB = async (slug: string) => {
+  const result = await Forum.findOne({ slug }).populate(
+    'owner',
+    'name role email image'
+  );
   return result;
 };
 
@@ -39,4 +47,5 @@ export const ForumService = {
   getAllForumsFromDB,
   updateForumToDB,
   deleteForumToDB,
+  getForumByIdFromDB,
 };

@@ -26,9 +26,9 @@ router
           // Normalize the path to forward slashes and ensure it starts with /uploads/
           // Multer stores in process.cwd() + /uploads/...
           // We want the path relative to the project root, e.g., /uploads/image/file.jpg
-          const projectRoot = process.cwd();
-          // path.relative gives path from projectRoot to file
-          let relativePath = path.relative(projectRoot, absolutePath);
+          const uploadsRoot = path.join(process.cwd(), 'uploads');
+          // path.relative gives path from uploadsRoot to file
+          let relativePath = path.relative(uploadsRoot, absolutePath);
           // Ensure forward slashes for URL compatibility
           relativePath = relativePath.split(path.sep).join('/');
           // Ensure it starts with /

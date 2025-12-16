@@ -18,6 +18,7 @@ router
 
 router
   .route('/:id')
+  .get(ForumController.getForumById)
   .patch(
     auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN, USER_ROLES.USER),
     ForumController.updateForum

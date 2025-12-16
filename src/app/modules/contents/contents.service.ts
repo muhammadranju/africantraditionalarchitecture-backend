@@ -26,12 +26,18 @@ const getContentByCountryToDB = async (country: string) => {
 };
 
 const getContentsToDB = async () => {
-  const result = await Contents.find();
+  const result = await Contents.find().populate(
+    'owner',
+    'name role email image'
+  );
   return result;
 };
 
-const getContentByIdToDB = async (id: string) => {
-  const result = await Contents.findById(id);
+const getContentByIdToDB = async (slug: string) => {
+  const result = await Contents.findOne({ slug }).populate(
+    'owner',
+    'name role email image'
+  );
   return result;
 };
 

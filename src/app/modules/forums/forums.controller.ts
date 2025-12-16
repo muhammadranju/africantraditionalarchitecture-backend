@@ -26,6 +26,17 @@ const getAllForums = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const getForumById = catchAsync(async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const result = await ForumService.getForumByIdFromDB(id);
+  sendResponse(res, {
+    success: true,
+    statusCode: StatusCodes.OK,
+    message: 'Forum fetched successfully',
+    data: result,
+  });
+});
+
 const updateForum = catchAsync(async (req: Request, res: Response) => {
   const { id } = req.params;
   const { ...forumData } = req.body;
@@ -52,6 +63,7 @@ const deleteForum = catchAsync(async (req: Request, res: Response) => {
 export const ForumController = {
   createForum,
   getAllForums,
+  getForumById,
   updateForum,
   deleteForum,
 };

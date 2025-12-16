@@ -21,7 +21,7 @@ const parseWaitingListData = (
   if (req.files) {
     const files = req.files as { [fieldname: string]: Express.Multer.File[] };
     if (files.image && files.image[0]) {
-      req.body.image = `/uploads/waiting-list/${files.image[0].filename}`;
+      req.body.image = `/waiting-list/${files.image[0].filename}`;
     }
   }
 

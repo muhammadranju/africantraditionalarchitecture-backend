@@ -8,12 +8,26 @@ const CommentSchema = new mongoose.Schema<IComment>(
       ref: 'User',
       required: true,
     },
-    comment: [
+    comment: {
+      type: String,
+      required: true,
+    },
+    image: [
       {
         type: String,
-        required: true,
+        default: undefined,
       },
     ],
+    content: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Contents',
+      default: undefined,
+    },
+    forum: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Forum',
+      default: undefined,
+    },
 
     type: {
       type: String,
