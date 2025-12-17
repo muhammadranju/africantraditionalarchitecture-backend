@@ -13,14 +13,14 @@ const getAllCommentDB = async () => {
 
 const getAllCommentContentsDB = async () => {
   const result = await Comment.find({ type: 'contents' })
-    .populate('content')
+    // .populate('content')
     .populate('owner', 'name email image role');
   return result;
 };
 
 const getAllCommentForumDB = async () => {
   const result = await Comment.find({ type: 'forum' })
-    .populate('forum')
+    // .populate('forum')
     .populate('owner', 'name email image role');
   return result;
 };
