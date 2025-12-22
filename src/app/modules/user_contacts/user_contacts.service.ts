@@ -1,14 +1,10 @@
-import { StatusCodes } from 'http-status-codes';
-import ApiError from '../../../errors/ApiError';
+import MailChecker from 'mailchecker';
 import { IUserContact } from './user_contacts.interface';
 import UserContact from './user_contacts.model';
-import MailChecker from 'mailchecker';
 
 const createContentToDB = async (contactData: IUserContact) => {
   const mailChecker = MailChecker.isValid(contactData.email);
-  if (!mailChecker) {
-    throw new ApiError(StatusCodes.BAD_REQUEST, 'Invalid email');
-  }
+
   const result = await UserContact.create(contactData);
   return result;
 };
