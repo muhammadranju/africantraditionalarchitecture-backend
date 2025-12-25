@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/consistent-type-definitions */
+/* eslint-disable no-unused-vars */
 export enum ProfessionalROLES {
   builder = 'builder',
   architect = 'architect',
@@ -24,5 +26,7 @@ export interface IWaiting {
   bio: string;
   available: boolean;
   status: WaitingStatus;
+  isRoleTitle: boolean;
+  agreedToTerms: boolean;
 }
 export interface IWaitingModal extends IWaiting, Document {}

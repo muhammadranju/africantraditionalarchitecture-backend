@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { StatusCodes } from 'http-status-codes';
 import ApiError from '../../../errors/ApiError';
 import { IContents } from './contents.interface';
@@ -25,11 +26,11 @@ const getContentByCountryToDB = async (country: string) => {
   return result;
 };
 
-const getContentsToDB = async () => {
-  const result = await Contents.find().populate(
-    'owner',
-    'name role email image'
-  );
+const getContentsToDB = async ({ limit, page }: any) => {
+  const result = await Contents.find()
+    .limit(limit)
+    .skip((page - 1) * limit)
+    .populate('owner', 'name role email image');
   return result;
 };
 

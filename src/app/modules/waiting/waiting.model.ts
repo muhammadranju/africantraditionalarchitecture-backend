@@ -19,7 +19,7 @@ const waitingSchema = new Schema<IWaitingModal>(
     email: {
       type: String,
       required: true,
-      unique: true,
+
       lowercase: true,
     },
 
@@ -57,6 +57,15 @@ const waitingSchema = new Schema<IWaitingModal>(
     available: {
       type: Boolean,
       default: true,
+    },
+
+    isRoleTitle: {
+      type: Boolean,
+      default: false,
+    },
+    agreedToTerms: {
+      type: Boolean,
+      default: false,
     },
 
     status: {

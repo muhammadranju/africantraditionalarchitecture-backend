@@ -39,7 +39,8 @@ const getContentByCountry = catchAsync(async (req: Request, res: Response) => {
 });
 
 const getContents = catchAsync(async (req: Request, res: Response) => {
-  const result = await ContentService.getContentsToDB();
+  const { limit, page } = req.query;
+  const result = await ContentService.getContentsToDB({ limit, page });
   sendResponse(res, {
     success: true,
     statusCode: StatusCodes.OK,
