@@ -1,8 +1,7 @@
 import z from 'zod';
-import { CategoryEnum } from './forums.interface';
 
-const ForumValidation = {
-  createForumZodSchema: z.object({
+const ForumCategoryValidation = {
+  createContentZodSchema: z.object({
     body: z.object({
       title: z.string({
         required_error: 'Title is required',
@@ -10,11 +9,12 @@ const ForumValidation = {
       description: z.string({
         required_error: 'Description is required',
       }),
-      category: z.string({
-        required_error: 'Category is required',
+      icon: z.string().optional(),
+      type: z.string({
+        required_error: 'Type is required',
       }),
     }),
   }),
 };
 
-export default ForumValidation;
+export default ForumCategoryValidation;

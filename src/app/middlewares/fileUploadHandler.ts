@@ -30,6 +30,7 @@ const fileUploadHandler = (customName?: string) => {
           case 'image':
           case 'coverImage':
           case 'images':
+          case 'icon':
             uploadDir = path.join(baseUploadDir, 'image');
             break;
           case 'media':
@@ -90,7 +91,8 @@ const fileUploadHandler = (customName?: string) => {
     if (
       file.fieldname === 'image' ||
       file.fieldname === 'coverImage' ||
-      file.fieldname === 'images'
+      file.fieldname === 'images' ||
+      file.fieldname === 'icon'
     ) {
       if (
         file.mimetype === 'image/jpeg' ||
@@ -139,6 +141,7 @@ const fileUploadHandler = (customName?: string) => {
     { name: 'images', maxCount: 5 },
     { name: 'medias', maxCount: 5 },
     { name: 'pdfs', maxCount: 5 },
+    { name: 'icon', maxCount: 1 },
   ]);
   return upload;
 };

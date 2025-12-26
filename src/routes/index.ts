@@ -6,6 +6,7 @@ import { ForumRoutes } from '../app/modules/forums/forums.route';
 import { UserRoutes } from '../app/modules/user/user.route';
 import { UserContactRoutes } from '../app/modules/user_contacts/user_contacts.route';
 import { WaitingListRoutes } from '../app/modules/waiting/waiting.route';
+import { ForumCategoryRoutes } from '../app/modules/forums_category/forums-category.route';
 const router = express.Router();
 
 const apiRoutes = [
@@ -37,6 +38,10 @@ const apiRoutes = [
   {
     path: '/user-contacts',
     route: UserContactRoutes,
+  },
+  {
+    path: '/forums-category',
+    route: ForumCategoryRoutes,
   },
 ];
 

@@ -17,7 +17,11 @@ const createForum = catchAsync(async (req: Request, res: Response) => {
 });
 
 const getAllForums = catchAsync(async (req: Request, res: Response) => {
-  const result = await ForumService.getAllForumsFromDB();
+  const { type, ref } = req.query;
+  const result = await ForumService.getAllForumsFromDB(
+    type as string,
+    ref as string
+  );
   sendResponse(res, {
     success: true,
     statusCode: StatusCodes.OK,

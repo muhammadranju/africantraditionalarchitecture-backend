@@ -1,8 +1,8 @@
 import mongoose from 'mongoose';
-import { CategoryEnum, IForum } from './forums.interface';
-import { StatusEnum } from '../contents/contents.interface';
-import slugify from 'slugify';
 import { nanoid } from 'nanoid';
+import slugify from 'slugify';
+import { StatusEnum } from '../contents/contents.interface';
+import { IForum } from './forums.interface';
 
 const ForumSchema = new mongoose.Schema<IForum>(
   {
@@ -20,15 +20,20 @@ const ForumSchema = new mongoose.Schema<IForum>(
       required: true,
     },
     category: {
-      type: String,
-      enum: Object.values(CategoryEnum),
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'ForumCategory',
       required: true,
     },
-    comments: [
-      {
-        type: String,
-      },
-    ],
+
+    type: {
+      type: String,
+      required: true,
+    },
+    refSlug: {
+      type: String,
+      required: true,
+    },
+
     status: {
       type: String,
       enum: Object.values(StatusEnum),
