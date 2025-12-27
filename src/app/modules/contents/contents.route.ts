@@ -63,9 +63,18 @@ router
     ContentController.createContent
   );
 
+router.route('/all-contents').get(ContentController.getAllContents);
+
 router.route('/category/:category').get(ContentController.getContentByCategory);
 
 router.route('/country/:country').get(ContentController.getContentByCountry);
+
+router
+  .route('/users')
+  .get(
+    auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN, USER_ROLES.USER),
+    ContentController.getContentsByUser
+  );
 
 router
   .route('/:id')

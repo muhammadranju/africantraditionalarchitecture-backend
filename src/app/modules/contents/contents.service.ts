@@ -16,18 +16,19 @@ const createContentToDB = async (contentData: IContents, user: any) => {
 };
 
 const getContentByCategoryToDB = async (category: string) => {
-  const result = await Contents.find({ category });
+  const result = await Contents.find({ category }).sort({ createdAt: -1 });
   return result;
 };
 
 const getContentByCountryToDB = async (country: string) => {
-  const result = await Contents.find({ country });
+  const result = await Contents.find({ country }).sort({ createdAt: -1 });
   console.log(result);
   return result;
 };
 
 const getContentsToDB = async ({ limit, page }: any) => {
   const result = await Contents.find()
+    .sort({ createdAt: -1 })
     .limit(limit)
     .skip((page - 1) * limit)
     .populate('owner', 'name role email image');
@@ -39,6 +40,15 @@ const getContentByIdToDB = async (slug: string) => {
     'owner',
     'name role email image'
   );
+  return result;
+};
+
+const getAllContentsToDB = async ({ limit, page }: any) => {
+  const result = await Contents.find()
+    .sort({ createdAt: -1 })
+    .limit(limit)
+    .skip((page - 1) * limit)
+    .populate('owner', 'name role email image');
   return result;
 };
 
@@ -60,6 +70,24 @@ const deleteContentToDB = async (id: string) => {
   return result;
 };
 
+// service
+const getContentsByUserToDB = async (
+  user: string,
+  { limit, page }: { limit: number; page: number }
+) => {
+  // Count total documents for this user
+  const total = await Contents.countDocuments({ owner: user });
+
+  // Fetch paginated contents
+  const contents = await Contents.find({ owner: user })
+    .sort({ createdAt: -1 })
+    .skip((page - 1) * limit)
+    .limit(limit)
+    .lean(); // optional: faster if you don't need mongoose docs
+
+  return { contents, total };
+};
+
 export const ContentService = {
   createContentToDB,
   getContentByCategoryToDB,
@@ -68,4 +96,6 @@ export const ContentService = {
   getContentByIdToDB,
   updateContentToDB,
   deleteContentToDB,
+  getAllContentsToDB,
+  getContentsByUserToDB,
 };

@@ -7,12 +7,13 @@ const createCommentToDB = async (commentData: IComment) => {
 };
 
 const getAllCommentDB = async () => {
-  const result = await Comment.find({});
+  const result = await Comment.find({}).sort({ createdAt: -1 });
   return result;
 };
 
 const getAllCommentContentsDB = async () => {
   const result = await Comment.find({ type: 'contents' })
+    .sort({ createdAt: -1 })
     // .populate('content')
     .populate('owner', 'name email image role');
   return result;
@@ -20,6 +21,7 @@ const getAllCommentContentsDB = async () => {
 
 const getAllCommentForumDB = async () => {
   const result = await Comment.find({ type: 'forum' })
+    .sort({ createdAt: -1 })
     // .populate('forum')
     .populate('owner', 'name email image role');
   return result;

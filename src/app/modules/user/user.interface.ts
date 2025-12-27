@@ -6,7 +6,8 @@ export type IUser = {
   role: USER_ROLES;
   contact: string;
   email: string;
-  password: string;
+  password?: string;
+  provider?: string;
   location: string;
   image?: string;
   bio?: string;

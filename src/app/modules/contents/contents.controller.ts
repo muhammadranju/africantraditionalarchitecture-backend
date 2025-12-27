@@ -49,6 +49,17 @@ const getContents = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const getAllContents = catchAsync(async (req: Request, res: Response) => {
+  const { limit, page } = req.query;
+  const result = await ContentService.getAllContentsToDB({ limit, page });
+  sendResponse(res, {
+    success: true,
+    statusCode: StatusCodes.OK,
+    message: 'Content fetched successfully',
+    data: result,
+  });
+});
+
 const getContentById = catchAsync(async (req: Request, res: Response) => {
   const { id } = req.params;
   const result = await ContentService.getContentByIdToDB(id);
@@ -82,12 +93,52 @@ const deleteContent = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+// controller
+const getContentsByUser = catchAsync(async (req: Request, res: Response) => {
+  let limit = parseInt(req.query.limit as string) || 10;
+  let page = parseInt(req.query.page as string) || 1;
+
+  // Safety: ensure positive values
+  if (page < 1) page = 1;
+  if (limit < 1) limit = 10;
+
+  const user = req.user;
+
+  const { contents, total } = await ContentService.getContentsByUserToDB(
+    user.id,
+    {
+      limit,
+      page,
+    }
+  );
+
+  const totalPages = Math.ceil(total / limit);
+
+  sendResponse(res, {
+    success: true,
+    statusCode: StatusCodes.OK,
+    message: 'Content fetched successfully',
+    data: {
+      contents,
+      pagination: {
+        currentPage: page,
+        totalPages,
+        total,
+        limit,
+        hasNext: page < totalPages,
+        hasPrev: page > 1,
+      },
+    },
+  });
+});
 export const ContentController = {
   createContent,
   getContentByCategory,
   getContentByCountry,
   getContents,
+  getAllContents,
   getContentById,
   updateContent,
   deleteContent,
+  getContentsByUser,
 };

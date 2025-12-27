@@ -88,6 +88,55 @@ const deleteUser = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const totalActiveUser = catchAsync(async (req: Request, res: Response) => {
+  const user = req.user;
+  const { ip, device, browser, os } = req.body;
+  const result = await UserService.totalActiveUserFromDB(
+    user,
+    ip,
+    device,
+    browser,
+    os
+  );
+
+  sendResponse(res, {
+    success: true,
+    statusCode: StatusCodes.OK,
+    message: 'Users retrieved successfully',
+    data: result,
+  });
+});
+
+const getMonthlyActiveUsers = catchAsync(
+  async (req: Request, res: Response) => {
+    const year = Number(req.query.year) || new Date().getFullYear();
+    const result = await UserService.getMonthlyActiveUsersFromDB(year);
+
+    sendResponse(res, {
+      success: true,
+      statusCode: StatusCodes.OK,
+      message: 'Monthly active users fetched successfully',
+      data: result,
+    });
+  }
+);
+
+const getActiveUsersByMonth = catchAsync(
+  async (req: Request, res: Response) => {
+    const year = Number(req.query.year) || new Date().getFullYear();
+    const month = Number(req.query.month) || new Date().getMonth() + 1;
+
+    const result = await UserService.getActiveUsersByMonthFromDB(year, month);
+
+    sendResponse(res, {
+      success: true,
+      statusCode: StatusCodes.OK,
+      message: 'Active users by month fetched successfully',
+      data: result,
+    });
+  }
+);
+
 export const UserController = {
   createUser,
   getUserProfile,
@@ -95,4 +144,7 @@ export const UserController = {
   getAllUsers,
   updateStatus,
   deleteUser,
+  totalActiveUser,
+  getMonthlyActiveUsers,
+  getActiveUsersByMonth,
 };

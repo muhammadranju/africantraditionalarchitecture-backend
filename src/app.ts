@@ -4,14 +4,28 @@ import { StatusCodes } from 'http-status-codes';
 import globalErrorHandler from './app/middlewares/globalErrorHandler';
 import router from './routes';
 import { Morgan } from './shared/morgen';
+import stripeWebhook from './app/modules/payment/payment.webhook';
 const app = express();
 
 //morgan
 app.use(Morgan.successHandler);
 app.use(Morgan.errorHandler);
 
+app.post(
+  '/api/v1/webhook',
+  express.raw({ type: 'application/json' }),
+  stripeWebhook
+);
 //body parser
-app.use(cors());
+app.use(
+  cors({
+    origin: [
+      'http://localhost:3000',
+      'http://10.10.7.101:3000',
+      'https://www.africantraditionalarchitecture.com',
+    ],
+  })
+);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 

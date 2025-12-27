@@ -25,10 +25,12 @@ const userSchema = new Schema<IUser, UserModal>(
     },
     password: {
       type: String,
-      required: true,
-      select: 0,
-      minlength: 8,
+      required: function (this: IUser) {
+        return this.provider !== 'google';
+      },
     },
+    provider: { type: String, required: true, default: 'manual' },
+
     image: {
       type: String,
       default: 'https://i.ibb.co/z5YHLV9/profile.png',
@@ -100,20 +102,11 @@ userSchema.statics.isMatchPassword = async (
   return await bcrypt.compare(password, hashPassword);
 };
 
-//check user
-userSchema.pre('save', async function (next) {
-  //check user
-  const isExist = await User.findOne({ email: this.email });
-  if (isExist) {
-    throw new ApiError(StatusCodes.BAD_REQUEST, 'Email already exist!');
+// Hash password only if it exists
+userSchema.pre('save', async function () {
+  if (this.isModified('password') && this.password) {
+    this.password = await bcrypt.hash(this.password, 10);
   }
-
-  //password hash
-  this.password = await bcrypt.hash(
-    this.password,
-    Number(config.bcrypt_salt_rounds)
-  );
-  next();
 });
 
 export const User = model<IUser, UserModal>('User', userSchema);

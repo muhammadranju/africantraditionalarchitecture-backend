@@ -1,9 +1,9 @@
 import { StatusCodes } from 'http-status-codes';
 import ApiError from '../../../errors/ApiError';
+import ForumCategory from '../forums_category/forums-category.model';
 import { IForum } from './forums.interface';
 import Forum from './forums.model';
-import ForumCategory from '../forums_category/forums-category.model';
-``;
+
 const createForumToDB = async (forumData: IForum, user: any) => {
   const ownerId = user.id;
 
@@ -47,7 +47,9 @@ const getAllForumsFromDB = async (type: string, ref: string) => {
 
   const result = await Forum.find({
     ...query,
-  }).populate('owner', 'name role email image');
+  })
+    .sort({ createdAt: -1 })
+    .populate('owner', 'name role email image');
 
   return result;
 };

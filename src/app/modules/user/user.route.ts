@@ -52,4 +52,25 @@ router
     UserController.deleteUser
   );
 
+router
+  .route('/active-user')
+  .post(
+    auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN),
+    UserController.totalActiveUser
+  );
+
+router
+  .route('/monthly-active-users')
+  .get(
+    auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN),
+    UserController.getMonthlyActiveUsers
+  );
+
+router
+  .route('/active-users-by-month')
+  .get(
+    auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN),
+    UserController.getActiveUsersByMonth
+  );
+
 export const UserRoutes = router;
