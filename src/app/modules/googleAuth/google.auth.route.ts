@@ -1,8 +1,8 @@
 import { Router } from 'express';
-import { googleAuth } from './google.auth.controller';
+import { googleAuthController } from './google.auth.controller';
 
 const router = Router();
 
-router.post('/', googleAuth);
+router.post('/', googleAuthController);
 
 export const googleRouter = router;

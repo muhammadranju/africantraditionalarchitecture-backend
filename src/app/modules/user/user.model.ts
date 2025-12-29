@@ -58,6 +58,11 @@ const userSchema = new Schema<IUser, UserModal>(
       default: 'active',
     },
 
+    isActive: {
+      type: Boolean,
+      default: true,
+    },
+
     verified: {
       type: Boolean,
       default: true,

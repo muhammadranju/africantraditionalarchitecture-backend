@@ -1,54 +1,77 @@
-import { Secret, SignOptions } from 'jsonwebtoken';
-import config from '../../../config';
-import { jwtHelper } from '../../../helpers/jwtHelper';
+import axios from 'axios';
+import jwt, { Secret, SignOptions } from 'jsonwebtoken';
+import { OAuth2Client } from 'google-auth-library';
 import { User } from '../user/user.model';
-import { verifyGoogleToken } from '../../../util/google';
+import { jwtHelper } from '../../../helpers/jwtHelper';
+import config from '../../../config';
 
-export class GoogleAuthService {
-  async googleLogin(idToken: string) {
-    const payload = await verifyGoogleToken(idToken);
+const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
-    if (!payload?.email) {
-      throw new Error('Invalid Google token');
-    }
+export const googleAuthService = async (code: string) => {
+  // 1️⃣ Exchange AUTH CODE → TOKENS
+  const tokenRes = await axios.post('https://oauth2.googleapis.com/token', {
+    code,
+    client_id: process.env.GOOGLE_CLIENT_ID,
+    client_secret: process.env.GOOGLE_CLIENT_SECRET,
+    redirect_uri: 'postmessage',
+    grant_type: 'authorization_code',
+  });
 
-    let user = await User.findOne({ email: payload.email });
-    if (!user) {
-      console.log('Creating user with payload:', {
-        name: payload.name,
-        email: payload.email,
-        image: payload.picture,
+  const { id_token } = tokenRes.data;
+
+  if (!id_token) {
+    throw new Error('ID token not received from Google');
+  }
+
+  // 2️⃣ Verify ID TOKEN
+  const ticket = await client.verifyIdToken({
+    idToken: id_token,
+    audience: process.env.GOOGLE_CLIENT_ID,
+  });
+
+  const payload = ticket.getPayload();
+
+  if (!payload || !payload.email) {
+    throw new Error('Invalid Google token');
+  }
+  console.log(payload);
+
+  let user = await User.findOne({ email: payload.email });
+  if (!user) {
+    console.log('Creating user with payload:', {
+      name: payload.name,
+      email: payload.email,
+      image: payload.picture,
+      role: 'USER',
+      provider: 'google',
+    });
+
+    try {
+      user = await User.create({
+        name: payload.name!,
+        email: payload.email!,
+        image: payload.picture!,
         role: 'USER',
         provider: 'google',
       });
-
-      try {
-        user = await User.create({
-          name: payload.name!,
-          email: payload.email!,
-          image: payload.picture!,
-          role: 'USER',
-          provider: 'google',
-        });
-        console.log('User is created:', user);
-      } catch (err) {
-        console.error('Failed to create user:', err);
-        throw new Error('Failed to create user');
-      }
-    }
-
-    let token;
-    try {
-      token = jwtHelper.createToken(
-        { id: user._id.toString(), email: user.email },
-        config.jwt.jwt_secret as Secret,
-        config.jwt.jwt_expire_in as SignOptions['expiresIn']
-      );
+      console.log('User is created:', user);
     } catch (err) {
-      console.error('JWT creation error:', err);
-      throw new Error('Failed to create JWT token');
+      console.error('Failed to create user:', err);
+      throw new Error('Failed to create user');
     }
-
-    return { token, user };
   }
-}
+
+  let token;
+  try {
+    token = jwtHelper.createToken(
+      { id: user._id.toString(), email: user.email, role: user.role },
+      config.jwt.jwt_secret as Secret,
+      config.jwt.jwt_expire_in as SignOptions['expiresIn']
+    );
+  } catch (err) {
+    console.error('JWT creation error:', err);
+    throw new Error('Failed to create JWT token');
+  }
+
+  return { token, user };
+};

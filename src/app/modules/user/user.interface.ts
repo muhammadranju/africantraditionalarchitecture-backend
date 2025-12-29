@@ -11,6 +11,7 @@ export type IUser = {
   location: string;
   image?: string;
   bio?: string;
+  isActive: boolean;
   website?: string;
   uploads?: string[];
   status: 'active' | 'delete' | 'suspended';
