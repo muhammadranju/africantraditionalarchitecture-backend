@@ -119,8 +119,20 @@ const getForumCategories = catchAsync(async (req: Request, res: Response) => {
     data: orderedSections,
   });
 });
+
+const getForumCategoryOnly = catchAsync(async (req: Request, res: Response) => {
+  const result = await ForumCategoryService.getForumCategoryByTypeToDB();
+  sendResponse(res, {
+    success: true,
+    statusCode: StatusCodes.OK,
+    message: 'Forum category fetched successfully',
+    data: result,
+  });
+});
+
 export const ForumCategoryController = {
   createForumCategory,
   getForumByCategory,
   getForumCategories,
+  getForumCategoryOnly,
 };

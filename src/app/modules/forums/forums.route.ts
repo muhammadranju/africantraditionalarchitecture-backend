@@ -16,6 +16,11 @@ router
     ForumController.createForum
   );
 
+router.get(
+  '/users',
+  auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN, USER_ROLES.USER),
+  ForumController.getForumsByUser
+);
 router
   .route('/:id')
   .get(ForumController.getForumById)

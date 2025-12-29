@@ -4,7 +4,7 @@ export type IForumCategory = {
   category: string;
   icon?: string;
   type: string;
-  posts: [];
+  posts: string[];
   views: number;
 
   slug: string;

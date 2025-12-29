@@ -6,6 +6,7 @@ import { ForumCategoryController } from './forums-category.controller';
 const router = express.Router();
 
 router.route('/').get(ForumCategoryController.getForumCategories);
+router.route('/category').get(ForumCategoryController.getForumCategoryOnly);
 router.route('/:slug').get(ForumCategoryController.getForumByCategory);
 router.route('/').post(
   fileUploadHandler(),

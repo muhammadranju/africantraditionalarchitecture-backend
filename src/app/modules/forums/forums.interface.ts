@@ -3,6 +3,7 @@
 import mongoose from 'mongoose';
 
 export interface IForum {
+  _id: string;
   title: string;
   description: string;
   owner: mongoose.Schema.Types.ObjectId;

@@ -64,10 +64,27 @@ const deleteForum = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const getForumsByUser = catchAsync(async (req: Request, res: Response) => {
+  const { limit, page } = req.query;
+  const user = req.user;
+  const result = await ForumService.getForumsToDB(
+    limit as string,
+    page as string,
+    user as any
+  );
+  sendResponse(res, {
+    success: true,
+    statusCode: StatusCodes.OK,
+    message: 'Forums fetched successfully',
+    data: result,
+  });
+});
+
 export const ForumController = {
   createForum,
   getAllForums,
   getForumById,
   updateForum,
   deleteForum,
+  getForumsByUser,
 };

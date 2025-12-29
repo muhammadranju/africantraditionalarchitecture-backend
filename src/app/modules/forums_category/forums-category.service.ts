@@ -16,8 +16,14 @@ const getForumCategoriesToDB = async () => {
   return result;
 };
 
+const getForumCategoryByTypeToDB = async () => {
+  const result = await ForumCategory.find().select('title');
+  return result;
+};
+
 export const ForumCategoryService = {
   createForumCategoryToDB,
   getForumByCategoryToDB,
   getForumCategoriesToDB,
+  getForumCategoryByTypeToDB,
 };
