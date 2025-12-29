@@ -10,6 +10,7 @@ import { UserContactRoutes } from '../app/modules/user_contacts/user_contacts.ro
 import { WaitingListRoutes } from '../app/modules/waiting/waiting.route';
 import { paymentRouter } from '../app/modules/payment/stripe.route';
 import { googleRouter } from '../app/modules/googleAuth/google.auth.route';
+import { NewsLetterRoutes } from '../app/modules/news_latter/news_latter.route';
 
 const router = express.Router();
 
@@ -60,6 +61,10 @@ const apiRoutes = [
   {
     path: '/google',
     route: googleRouter,
+  },
+  {
+    path: '/news-letter',
+    route: NewsLetterRoutes,
   },
 ];
 

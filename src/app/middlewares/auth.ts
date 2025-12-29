@@ -4,6 +4,7 @@ import { Secret } from 'jsonwebtoken';
 import config from '../../config';
 import ApiError from '../../errors/ApiError';
 import { jwtHelper } from '../../helpers/jwtHelper';
+import { TUser } from '../../types';
 
 const auth =
   (...roles: string[]) =>
@@ -21,7 +22,7 @@ const auth =
         const verifyUser = jwtHelper.verifyToken(
           token,
           config.jwt.jwt_secret as Secret
-        );
+        ) as TUser;
         //set user to header
         req.user = verifyUser;
 
