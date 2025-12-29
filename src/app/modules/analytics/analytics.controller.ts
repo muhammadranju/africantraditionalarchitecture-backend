@@ -3,6 +3,7 @@ import { StatusCodes } from 'http-status-codes';
 import catchAsync from '../../../shared/catchAsync';
 import sendResponse from '../../../shared/sendResponse';
 import { AnalyticsService } from './analytics.service';
+import { TUser } from '../../../types';
 
 const getDashboardStats = catchAsync(async (req: Request, res: Response) => {
   const result = await AnalyticsService.getDashboardStatsFromDB();
@@ -37,7 +38,8 @@ const getActiveUsersChartData = catchAsync(
 );
 
 const getUserStats = catchAsync(async (req: Request, res: Response) => {
-  const userId = req.user?.id;
+  const user = req.user as TUser;
+  const userId = user?.id;
   const result = await AnalyticsService.getUserStatsFromDB(userId);
   sendResponse(res, {
     success: true,
@@ -49,7 +51,8 @@ const getUserStats = catchAsync(async (req: Request, res: Response) => {
 
 const getUserUploadsChartData = catchAsync(
   async (req: Request, res: Response) => {
-    const userId = req.user?.id;
+    const user = req.user as TUser;
+    const userId = user?.id;
     const result = await AnalyticsService.getUserUploadsChartDataFromDB(userId);
     sendResponse(res, {
       success: true,
@@ -60,10 +63,21 @@ const getUserUploadsChartData = catchAsync(
   }
 );
 
+const getCommunityStats = catchAsync(async (req: Request, res: Response) => {
+  const result = await AnalyticsService.getCommunityStatsFromDB();
+  sendResponse(res, {
+    success: true,
+    statusCode: StatusCodes.OK,
+    message: 'Community stats fetched successfully',
+    data: result,
+  });
+});
+
 export const AnalyticsController = {
   getDashboardStats,
   getUploadsChartData,
   getActiveUsersChartData,
   getUserStats,
   getUserUploadsChartData,
+  getCommunityStats,
 };

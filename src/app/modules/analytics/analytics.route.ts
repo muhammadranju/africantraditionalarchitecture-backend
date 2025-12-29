@@ -35,4 +35,6 @@ router.get(
   AnalyticsController.getUserUploadsChartData
 );
 
+router.get('/community', AnalyticsController.getCommunityStats);
+
 export const AnalyticsRoutes = router;

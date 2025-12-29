@@ -1,7 +1,7 @@
 import Contents from '../contents/contents.model';
 import Forum from '../forums/forums.model';
-import { ActiveUserModal } from '../user/active_users.model';
 import { User } from '../user/user.model';
+import Comment from '../comments/comments.model';
 
 const getDashboardStatsFromDB = async () => {
   const totalUsers = await User.countDocuments();
@@ -11,8 +11,9 @@ const getDashboardStatsFromDB = async () => {
   // Active users in the last 30 days
   const thirtyDaysAgo = new Date();
   thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
-  const activeUsers30d = await ActiveUserModal.countDocuments({
-    lastActive: { $gte: thirtyDaysAgo },
+  const activeUsers30d = await User.countDocuments({
+    isActive: true,
+    updatedAt: { $gte: thirtyDaysAgo },
   });
 
   return {
@@ -24,7 +25,8 @@ const getDashboardStatsFromDB = async () => {
 };
 
 const getUploadsChartDataFromDB = async () => {
-  const year = new Date().getFullYear();
+  const now = new Date();
+  const year = now.getFullYear();
   const startOfYear = new Date(`${year}-01-01T00:00:00.000Z`);
   const endOfYear = new Date(`${year}-12-31T23:59:59.999Z`);
 
@@ -46,34 +48,66 @@ const getUploadsChartDataFromDB = async () => {
     { $sort: { _id: 1 } },
   ]);
 
-  // Fill months with 0 if no data
-  const months = [
-    'Jan',
-    'Feb',
-    'Mar',
-    'Apr',
-    'May',
-    'Jun',
-    'Jul',
-    'Aug',
-    'Sep',
-    'Oct',
-    'Nov',
-    'Dec',
+  // Current month total
+  const currentMonthStart = new Date(now.getFullYear(), now.getMonth(), 1);
+  const currentMonthEnd = new Date(
+    now.getFullYear(),
+    now.getMonth() + 1,
+    0,
+    23,
+    59,
+    59,
+    999
+  );
+  const currentMonthTotal = await Contents.countDocuments({
+    createdAt: { $gte: currentMonthStart, $lte: currentMonthEnd },
+  });
+
+  // Previous month total
+  const previousMonthStart = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+  const previousMonthEnd = new Date(
+    now.getFullYear(),
+    now.getMonth(),
+    0,
+    23,
+    59,
+    59,
+    999
+  );
+  const previousMonthTotal = await Contents.countDocuments({
+    createdAt: { $gte: previousMonthStart, $lte: previousMonthEnd },
+  });
+
+  // Group months into 2-month intervals
+  const groups = [
+    { name: 'Jan-Feb', months: [1, 2] },
+    { name: 'Mar-Apr', months: [3, 4] },
+    { name: 'May-Jun', months: [5, 6] },
+    { name: 'Jul-Aug', months: [7, 8] },
+    { name: 'Sep-Oct', months: [9, 10] },
+    { name: 'Nov-Dec', months: [11, 12] },
   ];
 
-  const result = months.map((monthName, index) => {
-    const monthIndex = index + 1;
-    const monthData = rawResult.find(
-      (r: { _id: number; totalUploads: number }) => r._id === monthIndex
-    );
+  const chartData = groups.map(group => {
+    const groupUploads = rawResult
+      .filter((r: { _id: number; totalUploads: number }) =>
+        group.months.includes(r._id)
+      )
+      .reduce(
+        (sum: number, r: { totalUploads: number }) => sum + r.totalUploads,
+        0
+      );
     return {
-      month: monthName,
-      uploads: monthData ? monthData.totalUploads : 0,
+      month: group.name,
+      uploads: groupUploads,
     };
   });
 
-  return result;
+  return {
+    chartData,
+    currentMonthTotal,
+    previousMonthTotal,
+  };
 };
 
 const getActiveUsersChartDataFromDB = async () => {
@@ -81,10 +115,11 @@ const getActiveUsersChartDataFromDB = async () => {
   const startOfYear = new Date(`${year}-01-01T00:00:00.000Z`);
   const endOfYear = new Date(`${year}-12-31T23:59:59.999Z`);
 
-  const rawResult = await ActiveUserModal.aggregate([
+  const rawResult = await User.aggregate([
     {
       $match: {
-        lastActive: {
+        isActive: true,
+        updatedAt: {
           $gte: startOfYear,
           $lte: endOfYear,
         },
@@ -92,37 +127,36 @@ const getActiveUsersChartDataFromDB = async () => {
     },
     {
       $group: {
-        _id: { $month: '$lastActive' },
+        _id: { $month: '$updatedAt' },
         totalActiveUsers: { $sum: 1 },
       },
     },
     { $sort: { _id: 1 } },
   ]);
 
-  // Fill months with 0 if no data
-  const months = [
-    'Jan',
-    'Feb',
-    'Mar',
-    'Apr',
-    'May',
-    'Jun',
-    'Jul',
-    'Aug',
-    'Sep',
-    'Oct',
-    'Nov',
-    'Dec',
+  // Group months into 2-month intervals
+  const groups = [
+    { name: 'Jan-Feb', months: [1, 2] },
+    { name: 'Mar-Apr', months: [3, 4] },
+    { name: 'May-Jun', months: [5, 6] },
+    { name: 'Jul-Aug', months: [7, 8] },
+    { name: 'Sep-Oct', months: [9, 10] },
+    { name: 'Nov-Dec', months: [11, 12] },
   ];
 
-  const result = months.map((monthName, index) => {
-    const monthIndex = index + 1;
-    const monthData = rawResult.find(
-      (r: { _id: number; totalActiveUsers: number }) => r._id === monthIndex
-    );
+  const result = groups.map(group => {
+    const groupActiveUsers = rawResult
+      .filter((r: { _id: number; totalActiveUsers: number }) =>
+        group.months.includes(r._id)
+      )
+      .reduce(
+        (sum: number, r: { totalActiveUsers: number }) =>
+          sum + r.totalActiveUsers,
+        0
+      );
     return {
-      month: monthName,
-      activeUsers: monthData ? monthData.totalActiveUsers : 0,
+      month: group.name,
+      activeUsers: groupActiveUsers,
     };
   });
 
@@ -140,7 +174,8 @@ const getUserStatsFromDB = async (userId: string) => {
 };
 
 const getUserUploadsChartDataFromDB = async (userId: string) => {
-  const year = new Date().getFullYear();
+  const now = new Date();
+  const year = now.getFullYear();
   const startOfYear = new Date(`${year}-01-01T00:00:00.000Z`);
   const endOfYear = new Date(`${year}-12-31T23:59:59.999Z`);
 
@@ -166,34 +201,100 @@ const getUserUploadsChartDataFromDB = async (userId: string) => {
     { $sort: { _id: 1 } },
   ]);
 
-  // Fill months with 0 if no data
-  const months = [
-    'Jan',
-    'Feb',
-    'Mar',
-    'Apr',
-    'May',
-    'Jun',
-    'Jul',
-    'Aug',
-    'Sep',
-    'Oct',
-    'Nov',
-    'Dec',
+  // Current month total for user
+  const currentMonthStart = new Date(now.getFullYear(), now.getMonth(), 1);
+  const currentMonthEnd = new Date(
+    now.getFullYear(),
+    now.getMonth() + 1,
+    0,
+    23,
+    59,
+    59,
+    999
+  );
+  const currentMonthTotal = await Contents.countDocuments({
+    owner: userId,
+    createdAt: { $gte: currentMonthStart, $lte: currentMonthEnd },
+  });
+
+  const totalUploads = await Contents.countDocuments({ owner: userId });
+
+  // Previous month total for user
+  const previousMonthStart = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+  const previousMonthEnd = new Date(
+    now.getFullYear(),
+    now.getMonth(),
+    0,
+    23,
+    59,
+    59,
+    999
+  );
+  const previousMonthTotal = await Contents.countDocuments({
+    owner: userId,
+    createdAt: { $gte: previousMonthStart, $lte: previousMonthEnd },
+  });
+
+  // Group months into 2-month intervals
+  const groups = [
+    { name: 'Jan', months: [1] },
+    { name: 'Feb', months: [2] },
+    { name: 'Mar', months: [3] },
+    { name: 'Apr', months: [4] },
+    { name: 'May', months: [5] },
+    { name: 'Jun', months: [6] },
+    { name: 'Jul', months: [7] },
+    { name: 'Aug', months: [8] },
+    { name: 'Sep', months: [9] },
+    { name: 'Oct', months: [10] },
+    { name: 'Nov', months: [11] },
+    { name: 'Dec', months: [12] },
   ];
 
-  const result = months.map((monthName, index) => {
-    const monthIndex = index + 1;
-    const monthData = rawResult.find(
-      (r: { _id: number; totalUploads: number }) => r._id === monthIndex
-    );
+  const chartData = groups.map(group => {
+    const groupUploads = rawResult
+      .filter((r: { _id: number; totalUploads: number }) =>
+        group.months.includes(r._id)
+      )
+      .reduce(
+        (sum: number, r: { totalUploads: number }) => sum + r.totalUploads,
+        0
+      );
     return {
-      month: monthName,
-      uploads: monthData ? monthData.totalUploads : 0,
+      month: group.name,
+      uploads: groupUploads,
     };
   });
 
-  return result;
+  return {
+    chartData,
+    currentMonthTotal,
+    previousMonthTotal,
+    totalUploads,
+  };
+};
+
+const getCommunityStatsFromDB = async () => {
+  const discussions = await Forum.countDocuments();
+  const topics = await Comment.countDocuments();
+  const posts = await Contents.countDocuments();
+  const members = await User.countDocuments();
+
+  // Online (Active users in the last 30 days)
+  const thirtyDaysAgo = new Date();
+  thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+  const online = await User.countDocuments({
+    isActive: true,
+    updatedAt: { $gte: thirtyDaysAgo },
+  });
+
+  return {
+    discussions,
+    topics,
+    posts,
+    online,
+    members,
+  };
 };
 
 export const AnalyticsService = {
@@ -202,4 +303,5 @@ export const AnalyticsService = {
   getActiveUsersChartDataFromDB,
   getUserStatsFromDB,
   getUserUploadsChartDataFromDB,
+  getCommunityStatsFromDB,
 };
