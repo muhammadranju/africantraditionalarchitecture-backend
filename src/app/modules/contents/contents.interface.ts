@@ -7,7 +7,7 @@ export enum IRegionEnum {
   north = 'north',
   south = 'south',
   central = 'central',
-  globally = 'globally',
+  global = 'global',
 }
 
 // Define the interface for the document (extending Mongoose's Document for full typing)

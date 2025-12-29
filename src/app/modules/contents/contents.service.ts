@@ -3,16 +3,24 @@ import { StatusCodes } from 'http-status-codes';
 import ApiError from '../../../errors/ApiError';
 import { IContents } from './contents.interface';
 import Contents from './contents.model';
+import { User } from '../user/user.model';
+import Comment from '../comments/comments.model';
 
-const createContentToDB = async (contentData: IContents, user: any) => {
+const createContentToDB = async (contentData: IContents, userId: any) => {
   const contentDataWithUser = {
     ...contentData,
-
-    owner: user.id,
+    owner: userId.id,
   };
 
-  const result = await Contents.create(contentDataWithUser);
-  return result;
+  const result = new Contents(contentDataWithUser);
+  const user = await User.findById(userId.id);
+
+  result.validateSync();
+  user?.uploads?.push(result._id.toString());
+  await user?.save();
+  const savedContent = await result.save();
+
+  return savedContent;
 };
 
 const getContentByCategoryToDB = async (category: string) => {
@@ -40,7 +48,17 @@ const getContentByIdToDB = async (slug: string) => {
     'owner',
     'name role email image'
   );
-  return result;
+  const comments = await Comment.find({ type: 'contents' })
+    .sort({ createdAt: -1 })
+    .populate('owner', 'name role email image createdAt');
+
+  const commentsByContents = comments.filter(
+    content =>
+      content.type === 'contents' &&
+      content?.content?.toString() === result?._id.toString()
+  );
+
+  return { result, commentsByContents };
 };
 
 const getAllContentsToDB = async ({ limit, page }: any) => {

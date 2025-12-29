@@ -3,9 +3,12 @@ import { StatusCodes } from 'http-status-codes';
 import catchAsync from '../../../shared/catchAsync';
 import sendResponse from '../../../shared/sendResponse';
 import { ContentService } from './contents.service';
+import ApiError from '../../../errors/ApiError';
+import { TUser } from '../../../types';
 
 const createContent = catchAsync(async (req: Request, res: Response) => {
   const { ...contentData } = req.body;
+
   const user = req.user;
   const result = await ContentService.createContentToDB(contentData, user);
   sendResponse(res, {
@@ -102,7 +105,10 @@ const getContentsByUser = catchAsync(async (req: Request, res: Response) => {
   if (page < 1) page = 1;
   if (limit < 1) limit = 10;
 
-  const user = req.user;
+  const user = req.user as TUser;
+  if (!user || !user.id) {
+    throw new ApiError(StatusCodes.UNAUTHORIZED, 'User not authenticated');
+  }
 
   const { contents, total } = await ContentService.getContentsByUserToDB(
     user.id,
