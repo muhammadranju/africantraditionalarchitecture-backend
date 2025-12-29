@@ -1,0 +1,5 @@
+src/app/modules/analytics/analytics.controller.ts(40,28): error TS2339: Property 'id' does not exist on type 'User'.
+src/app/modules/analytics/analytics.controller.ts(52,30): error TS2339: Property 'id' does not exist on type 'User'.
+src/app/modules/auth/auth.controller.ts(60,22): error TS2339: Property 'id' does not exist on type 'User'.
+src/app/modules/contents/contents.controller.ts(108,22): error TS2339: Property 'id' does not exist on type 'User'.
+src/app/modules/contents/contents.controller.ts(113,10): error TS2339: Property 'id' does not exist on type 'User'.

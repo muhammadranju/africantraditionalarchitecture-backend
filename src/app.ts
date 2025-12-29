@@ -5,6 +5,7 @@ import globalErrorHandler from './app/middlewares/globalErrorHandler';
 import router from './routes';
 import { Morgan } from './shared/morgen';
 import stripeWebhook from './app/modules/payment/payment.webhook';
+import passport from 'passport';
 const app = express();
 
 //morgan
@@ -21,13 +22,17 @@ app.use(
   cors({
     origin: [
       'http://localhost:3000',
+      'http://localhost:3002',
       'http://10.10.7.101:3000',
+      'http://10.10.7.100:3001',
+      'http://10.10.7.102:3002',
       'https://www.africantraditionalarchitecture.com',
     ],
   })
 );
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(passport.initialize());
 
 //file retrieve
 app.use(express.static('uploads'));
