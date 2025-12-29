@@ -39,6 +39,11 @@ const deleteCommentToDB = async (id: string) => {
   return result;
 };
 
+const getSingleCommentDB = async (id: string) => {
+  const result = await Comment.findById(id);
+  return result;
+};
+
 export const CommentService = {
   createCommentToDB,
   getAllCommentDB,
@@ -46,4 +51,5 @@ export const CommentService = {
   getAllCommentForumDB,
   updateCommentToDB,
   deleteCommentToDB,
+  getSingleCommentDB,
 };

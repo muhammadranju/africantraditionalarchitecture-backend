@@ -71,6 +71,17 @@ const deleteComment = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const getSingleComment = catchAsync(async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const result = await CommentService.getSingleCommentDB(id);
+  sendResponse(res, {
+    success: true,
+    statusCode: StatusCodes.OK,
+    message: 'Comment fetched successfully',
+    data: result,
+  });
+});
+
 export const CommentController = {
   createComment,
   getAllComment,
@@ -78,4 +89,5 @@ export const CommentController = {
   getAllCommentByForum,
   updateComment,
   deleteComment,
+  getSingleComment,
 };

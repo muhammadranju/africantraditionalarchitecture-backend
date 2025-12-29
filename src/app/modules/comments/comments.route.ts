@@ -30,6 +30,8 @@ router
     auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN, USER_ROLES.USER),
     CommentController.createComment
   );
+
+router.route('/:id').get(CommentController.getSingleComment);
 router.route('/contents').get(CommentController.getAllCommentByContents);
 router.route('/forum').get(CommentController.getAllCommentByForum);
 
