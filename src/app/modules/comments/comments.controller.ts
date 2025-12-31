@@ -82,6 +82,31 @@ const getSingleComment = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const likeComment = catchAsync(async (req: Request, res: Response) => {
+  const { id } = req.params;
+  console.log(id);
+  const user = req.user as any;
+  const result = await CommentService.likeCommentToDB(id, user.id);
+  sendResponse(res, {
+    success: true,
+    statusCode: StatusCodes.OK,
+    message: 'Comment liked successfully',
+    data: result,
+  });
+});
+
+const replyComment = catchAsync(async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const user = req.user as any;
+  const result = await CommentService.replyCommentToDB(id);
+  sendResponse(res, {
+    success: true,
+    statusCode: StatusCodes.OK,
+    message: 'Comment replied successfully',
+    data: result,
+  });
+});
+
 export const CommentController = {
   createComment,
   getAllComment,
@@ -90,4 +115,6 @@ export const CommentController = {
   updateComment,
   deleteComment,
   getSingleComment,
+  likeComment,
+  replyComment,
 };

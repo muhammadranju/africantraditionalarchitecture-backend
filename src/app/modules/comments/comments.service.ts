@@ -1,3 +1,5 @@
+import { StatusCodes } from 'http-status-codes';
+import ApiError from '../../../errors/ApiError';
 import { IComment } from './comments.interface';
 import Comment from './comments.model';
 
@@ -44,6 +46,65 @@ const getSingleCommentDB = async (id: string) => {
   return result;
 };
 
+// const likeCommentToDB = async (id: string, userId: string) => {
+//   // const result = await Comment.findByIdAndUpdate(
+//   //   id,
+//   //   { likes: id },
+//   //   { new: true }
+//   // );
+
+//   const result = await Comment.findById(id);
+
+//   if (!result) {
+//     throw new ApiError(StatusCodes.NOT_FOUND, 'Comment not found');
+//   }
+
+//   if (result?.likes?.includes(userId as any)) {
+
+//     // result.likes = result.likes.filter(like => like !== (userId as any));
+
+//       result?.likes?.pull(userId as any);
+
+//   } else {
+//     result?.likes?.push(userId as any);
+//   }
+
+//   await result.save();
+
+//   return result;
+// };
+
+const likeCommentToDB = async (id: string, userId: string) => {
+  const comment = await Comment.findById(id);
+
+  if (!comment) {
+    throw new ApiError(StatusCodes.NOT_FOUND, 'Comment not found');
+  }
+
+  const userLiked = comment?.likes?.some(like => like.toString() === userId);
+
+  if (userLiked) {
+    // Remove like if user already liked
+    comment.likes = comment?.likes?.filter(like => like.toString() !== userId);
+  } else {
+    // Add like if user hasn't liked
+    comment?.likes?.push(userId as any);
+  }
+
+  await comment.save();
+
+  return comment;
+};
+
+const replyCommentToDB = async (id: string) => {
+  const result = await Comment.findByIdAndUpdate(
+    id,
+    { replies: id },
+    { new: true }
+  );
+  return result;
+};
+
 export const CommentService = {
   createCommentToDB,
   getAllCommentDB,
@@ -52,4 +113,6 @@ export const CommentService = {
   updateCommentToDB,
   deleteCommentToDB,
   getSingleCommentDB,
+  likeCommentToDB,
+  replyCommentToDB,
 };

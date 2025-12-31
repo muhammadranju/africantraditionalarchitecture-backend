@@ -46,4 +46,12 @@ router
     CommentController.deleteComment
   );
 
+router
+  .route('/like/:id')
+  .patch(
+    auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN, USER_ROLES.USER),
+    CommentController.likeComment
+  );
+// router.route('/reply/:id').post(CommentController.replyComment);
+
 export const CommentRoutes = router;

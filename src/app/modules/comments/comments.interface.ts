@@ -7,4 +7,6 @@ export interface IComment {
   image?: string;
   content?: mongoose.Types.ObjectId;
   forum?: mongoose.Types.ObjectId;
+  likes?: mongoose.Types.ObjectId[];
+  replies?: mongoose.Types.ObjectId[];
 }
