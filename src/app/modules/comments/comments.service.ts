@@ -46,34 +46,6 @@ const getSingleCommentDB = async (id: string) => {
   return result;
 };
 
-// const likeCommentToDB = async (id: string, userId: string) => {
-//   // const result = await Comment.findByIdAndUpdate(
-//   //   id,
-//   //   { likes: id },
-//   //   { new: true }
-//   // );
-
-//   const result = await Comment.findById(id);
-
-//   if (!result) {
-//     throw new ApiError(StatusCodes.NOT_FOUND, 'Comment not found');
-//   }
-
-//   if (result?.likes?.includes(userId as any)) {
-
-//     // result.likes = result.likes.filter(like => like !== (userId as any));
-
-//       result?.likes?.pull(userId as any);
-
-//   } else {
-//     result?.likes?.push(userId as any);
-//   }
-
-//   await result.save();
-
-//   return result;
-// };
-
 const likeCommentToDB = async (id: string, userId: string) => {
   const comment = await Comment.findById(id);
 
