@@ -6,6 +6,7 @@ import auth from '../../middlewares/auth';
 import validateRequest from '../../middlewares/validateRequest';
 import { ContentController } from './contents.controller';
 import ContentValidation from './contents.validation';
+import { checkImagesModeration } from '../../middlewares/imageModeration';
 
 const router = express.Router();
 
@@ -14,6 +15,7 @@ router
   .get(ContentController.getContents)
   .post(
     fileUploadHandler(),
+    checkImagesModeration, // ✅ Moderation middleware added here
     (req: Request, res: Response, next: NextFunction) => {
       if (req.files) {
         const files = req.files as {
