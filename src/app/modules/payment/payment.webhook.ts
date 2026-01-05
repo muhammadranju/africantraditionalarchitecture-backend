@@ -19,16 +19,12 @@ const stripeWebhook = async (req: Request, res: Response) => {
   }
 
   // Use type assertion to bypass strict union checking
-  if ((event.type as string) === 'payment_link.completed') {
-    // Cast event.data.object to PaymentLink safely
-    const link = event.data.object as StripeType.PaymentLink & {
-      metadata: Record<string, string>;
-    };
-
-    const metadata = link.metadata;
+  if ((event.type as string) === 'checkout.session.completed') {
+    // Cast event.data.object to Checkout.Session safely
+    const session = event.data.object as StripeType.Checkout.Session;
 
     await DonationModel.findOneAndUpdate(
-      { email: metadata.email, stripePaymentLink: link.url },
+      { stripeSessionId: session.id },
       { paymentStatus: 'paid' }
     );
   }
