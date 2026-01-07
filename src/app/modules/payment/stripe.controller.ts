@@ -17,12 +17,12 @@ export const createPaymentLink = catchAsync(
       donationCategory,
       description,
       amount,
+      paymentStatus,
     } = req.body;
 
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
       mode: 'payment',
-      customer_email: email,
 
       line_items: [
         {
@@ -65,7 +65,7 @@ export const createPaymentLink = catchAsync(
       description,
       amount,
       stripeSessionId: session.id,
-      paymentStatus: 'paid',
+      paymentStatus: paymentStatus || 'paid',
     });
 
     res.status(200).json({
