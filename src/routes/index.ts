@@ -11,6 +11,7 @@ import { WaitingListRoutes } from '../app/modules/waiting/waiting.route';
 import { paymentRouter } from '../app/modules/payment/stripe.route';
 import { googleRouter } from '../app/modules/googleAuth/google.auth.route';
 import { NewsLetterRoutes } from '../app/modules/news_latter/news_latter.route';
+import { DatabaseRoute } from '../app/modules/database/database.route';
 
 const router = express.Router();
 
@@ -65,6 +66,10 @@ const apiRoutes = [
   {
     path: '/news-letter',
     route: NewsLetterRoutes,
+  },
+  {
+    path: '/database',
+    route: DatabaseRoute,
   },
 ];
 

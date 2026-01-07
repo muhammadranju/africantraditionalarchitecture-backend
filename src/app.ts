@@ -28,6 +28,7 @@ app.use(
       'http://10.10.7.102:3002',
       'https://www.africantraditionalarchitecture.com',
       'https://campbell-mid-involve-functions.trycloudflare.com',
+      'https://fastest-chronic-gold-colleagues.trycloudflare.com',
     ],
   })
 );
