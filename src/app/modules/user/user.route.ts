@@ -73,4 +73,8 @@ router
     UserController.getActiveUsersByMonth
   );
 
+router
+  .route('/:id')
+  .delete(auth(USER_ROLES.SUPER_ADMIN), UserController.deleteUser);
+
 export const UserRoutes = router;
