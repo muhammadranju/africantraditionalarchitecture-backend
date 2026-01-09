@@ -38,23 +38,13 @@ export const googleAuthService = async (code: string) => {
 
   let user = await User.findOne({ email: payload.email });
   if (!user) {
-    console.log('Creating user with payload:', {
-      name: payload.name,
-      email: payload.email,
-      image: payload.picture,
-      role: 'USER',
-      provider: 'google',
-    });
-
     try {
       user = await User.create({
         name: payload.name!,
         email: payload.email!,
-        image: payload.picture!,
         role: 'USER',
         provider: 'google',
       });
-      console.log('User is created:', user);
     } catch (err) {
       console.error('Failed to create user:', err);
       throw new Error('Failed to create user');
