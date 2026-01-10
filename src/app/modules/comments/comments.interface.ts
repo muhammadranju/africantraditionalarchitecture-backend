@@ -4,7 +4,9 @@ export interface IComment {
   owner: mongoose.Types.ObjectId;
   comment: string;
   type: string;
-  image?: string;
+  image?: string[];
+  videos?: string[];
+  pdfs?: string[];
   content?: mongoose.Types.ObjectId;
   forum?: mongoose.Types.ObjectId;
   likes?: mongoose.Types.ObjectId[];

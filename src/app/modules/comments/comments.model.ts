@@ -18,6 +18,21 @@ const CommentSchema = new mongoose.Schema<IComment>(
         default: undefined,
       },
     ],
+
+    videos: [
+      {
+        type: String,
+        default: undefined,
+      },
+    ],
+
+    pdfs: [
+      {
+        type: String,
+        default: undefined,
+      },
+    ],
+
     content: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Contents',

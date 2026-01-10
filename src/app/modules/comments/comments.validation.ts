@@ -7,6 +7,7 @@ const CommentValidation = {
         required_error: 'Comment is required',
       }),
       image: z.array(z.string()).optional(),
+      pdfs: z.array(z.string()).optional(),
       content: z.string().optional(),
       forum: z.string().optional(),
       type: z.string({

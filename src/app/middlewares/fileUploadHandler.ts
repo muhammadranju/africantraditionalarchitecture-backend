@@ -39,7 +39,12 @@ const fileUploadHandler = (customName?: string) => {
             break;
           case 'doc':
           case 'pdfs':
+          case 'pdf':
             uploadDir = path.join(baseUploadDir, 'doc');
+            break;
+          case 'video':
+          case 'videos':
+            uploadDir = path.join(baseUploadDir, 'media');
             break;
           case 'type':
             if (
@@ -108,7 +113,12 @@ const fileUploadHandler = (customName?: string) => {
           )
         );
       }
-    } else if (file.fieldname === 'media' || file.fieldname === 'medias') {
+    } else if (
+      file.fieldname === 'media' ||
+      file.fieldname === 'medias' ||
+      file.fieldname === 'video' ||
+      file.fieldname === 'videos'
+    ) {
       if (file.mimetype === 'video/mp4' || file.mimetype === 'audio/mpeg') {
         cb(null, true);
       } else {
@@ -119,7 +129,11 @@ const fileUploadHandler = (customName?: string) => {
           )
         );
       }
-    } else if (file.fieldname === 'doc' || file.fieldname === 'pdfs') {
+    } else if (
+      file.fieldname === 'doc' ||
+      file.fieldname === 'pdfs' ||
+      file.fieldname === 'pdf'
+    ) {
       if (file.mimetype === 'application/pdf') {
         cb(null, true);
       } else {
@@ -141,6 +155,9 @@ const fileUploadHandler = (customName?: string) => {
     { name: 'images', maxCount: 5 },
     { name: 'medias', maxCount: 5 },
     { name: 'pdfs', maxCount: 5 },
+    { name: 'pdf', maxCount: 5 },
+    { name: 'video', maxCount: 5 },
+    { name: 'videos', maxCount: 5 },
     { name: 'icon', maxCount: 1 },
   ]);
   return upload;

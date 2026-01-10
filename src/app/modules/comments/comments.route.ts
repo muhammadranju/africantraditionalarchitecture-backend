@@ -11,11 +11,30 @@ import { NextFunction, Request, Response } from 'express';
 import fileUploadHandler from '../../middlewares/fileUploadHandler';
 
 const parseCommentData = (req: Request, res: Response, next: NextFunction) => {
-  if (req.files && 'image' in req.files) {
+  if (req.files) {
     const files = req.files as { [fieldname: string]: Express.Multer.File[] };
-    if (files.image && files.image.length > 0) {
-      req.body.image = files.image.map(file => `/image/${file.filename}`);
-    }
+
+    // Handle images
+    let images: string[] = [];
+    if (files.image)
+      images = images.concat(
+        files.image.map(file => `/image/${file.filename}`)
+      );
+    if (files.images)
+      images = images.concat(
+        files.images.map(file => `/image/${file.filename}`)
+      );
+    if (images.length > 0) req.body.image = images;
+
+    // Handle PDFs
+    let pdfs: string[] = [];
+    if (files.pdfs)
+      pdfs = pdfs.concat(files.pdfs.map(file => `/doc/${file.filename}`));
+    if (files.pdf)
+      pdfs = pdfs.concat(files.pdf.map(file => `/doc/${file.filename}`));
+    if (files.doc)
+      pdfs = pdfs.concat(files.doc.map(file => `/doc/${file.filename}`));
+    if (pdfs.length > 0) req.body.pdfs = pdfs;
   }
   next();
 };

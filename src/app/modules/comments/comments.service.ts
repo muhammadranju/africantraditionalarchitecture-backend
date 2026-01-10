@@ -3,8 +3,29 @@ import ApiError from '../../../errors/ApiError';
 import { IComment } from './comments.interface';
 import Comment from './comments.model';
 
+function extractYouTubeVideoId(url: string) {
+  if (!url) return null;
+
+  const regex =
+    /(?:youtube\.com\/(?:.*v=|v\/|embed\/|shorts\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
+
+  const match = url.match(regex);
+  return match ? match[1] : null;
+}
+
 const createCommentToDB = async (commentData: IComment) => {
-  const result = await Comment.create(commentData);
+  console.log(commentData);
+  const videoId = commentData.videos?.map(video =>
+    extractYouTubeVideoId(video)
+  );
+
+  const comment = new Comment({
+    ...commentData,
+    videos: videoId,
+    pdfs: commentData.pdfs,
+  });
+  const result = await comment.save();
+  console.log(comment);
   return result;
 };
 
