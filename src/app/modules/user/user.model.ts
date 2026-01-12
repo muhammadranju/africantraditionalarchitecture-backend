@@ -33,7 +33,7 @@ const userSchema = new Schema<IUser, UserModal>(
 
     image: {
       type: String,
-      default: '/image/profile-1768253048433.png',
+      default: '',
     },
 
     bio: {
