@@ -43,12 +43,16 @@ app.use('/api/v1', router);
 
 //live response
 app.get('/', (req: Request, res: Response) => {
+  console.log(req.ip);
   const date = new Date(Date.now());
-  res.send(
-    `<h1 style="text-align:center; color:#173616; font-family:Verdana;">Beep-beep! The server is alive and kicking.</h1>
-    <p style="text-align:center; color:#173616; font-family:Verdana;">${date}</p>
-    `
+  res.redirect(
+    'https://www.africantraditionalarchitecture.com/?very-bad=' + req.ip
   );
+  // res.send(
+  //   `<h1 style="text-align:center; color:#173616; font-family:Verdana;">Beep-beep! The server is alive and kicking.</h1>
+  //   <p style="text-align:center; color:#173616; font-family:Verdana;">${date}</p>
+  //   `
+  // );
 });
 
 //global error handle
