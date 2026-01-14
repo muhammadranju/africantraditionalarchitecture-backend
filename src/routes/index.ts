@@ -12,6 +12,7 @@ import { paymentRouter } from '../app/modules/payment/stripe.route';
 import { googleRouter } from '../app/modules/googleAuth/google.auth.route';
 import { NewsLetterRoutes } from '../app/modules/news_latter/news_latter.route';
 import { DatabaseRoute } from '../app/modules/database/database.route';
+import { BlogRoutes } from '../app/modules/blog/blog.route';
 
 const router = express.Router();
 
@@ -70,6 +71,10 @@ const apiRoutes = [
   {
     path: '/database',
     route: DatabaseRoute,
+  },
+  {
+    path: '/blogs',
+    route: BlogRoutes,
   },
 ];
 
