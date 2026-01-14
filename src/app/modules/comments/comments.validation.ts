@@ -10,6 +10,8 @@ const CommentValidation = {
       pdfs: z.array(z.string()).optional(),
       content: z.string().optional(),
       forum: z.string().optional(),
+      videos: z.array(z.string()).optional(),
+      blog: z.string().optional(),
       type: z.string({
         required_error: 'Type is required',
       }),

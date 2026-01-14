@@ -44,6 +44,12 @@ const CommentSchema = new mongoose.Schema<IComment>(
       default: undefined,
     },
 
+    blog: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Blog',
+      default: undefined,
+    },
+
     likes: [
       {
         type: mongoose.Schema.Types.ObjectId,

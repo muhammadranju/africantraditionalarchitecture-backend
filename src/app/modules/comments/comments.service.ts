@@ -15,9 +15,11 @@ function extractYouTubeVideoId(url: string) {
 
 const createCommentToDB = async (commentData: IComment) => {
   console.log(commentData);
-  const videoId = commentData.videos?.map(video =>
-    extractYouTubeVideoId(video)
-  );
+  const videoId = Array.isArray(commentData.videos)
+    ? commentData.videos
+        .map(video => extractYouTubeVideoId(video))
+        .filter(Boolean)
+    : [];
 
   const comment = new Comment({
     ...commentData,
