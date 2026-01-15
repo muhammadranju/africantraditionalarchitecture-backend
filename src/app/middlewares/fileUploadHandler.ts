@@ -148,19 +148,19 @@ const fileUploadHandler = (customName?: string) => {
     storage: storage,
     fileFilter: filterFilter,
     limits: {
-      fileSize: 50 * 1024 * 1024, // 50MB
+      fileSize: Infinity,
     },
   }).fields([
-    { name: 'image', maxCount: 3 },
-    { name: 'media', maxCount: 3 },
-    { name: 'doc', maxCount: 3 },
+    { name: 'image', maxCount: 50 },
+    { name: 'media', maxCount: 50 },
+    { name: 'doc', maxCount: 50 },
     { name: 'coverImage', maxCount: 1 },
-    { name: 'images', maxCount: 5 },
-    { name: 'medias', maxCount: 5 },
-    { name: 'pdfs', maxCount: 5 },
-    { name: 'pdf', maxCount: 5 },
-    { name: 'video', maxCount: 5 },
-    { name: 'videos', maxCount: 5 },
+    { name: 'images', maxCount: 50 },
+    { name: 'medias', maxCount: 50 },
+    { name: 'pdfs', maxCount: 50 },
+    { name: 'pdf', maxCount: 50 },
+    { name: 'video', maxCount: 50 },
+    { name: 'videos', maxCount: 50 },
     { name: 'icon', maxCount: 1 },
   ]);
   return upload;

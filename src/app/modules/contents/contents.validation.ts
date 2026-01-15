@@ -17,7 +17,10 @@ const ContentValidation = {
         required_error: 'Cover Image is required',
       }),
 
-      region: z.enum(['east', 'west', 'north', 'south', 'central', 'global'], {
+      // region: z.enum(['east', 'west', 'north', 'south', 'central', 'global'], {
+      //   required_error: 'Region is required',
+      // }),
+      region: z.string({
         required_error: 'Region is required',
       }),
 

@@ -17,37 +17,63 @@ router
     fileUploadHandler(),
     checkImagesModeration, // ✅ Moderation middleware added here
     (req: Request, res: Response, next: NextFunction) => {
-      if (req.files) {
-        const files = req.files as {
-          [fieldname: string]: Express.Multer.File[];
-        };
+      const files = req.files as {
+        [fieldname: string]: Express.Multer.File[];
+      };
 
-        const getRelativePath = (absolutePath: string) => {
-          const uploadsRoot = path.join(process.cwd(), 'uploads');
-          let relativePath = path.relative(uploadsRoot, absolutePath);
-          relativePath = relativePath.split(path.sep).join('/');
-          // Ensure it starts with /
-          if (!relativePath.startsWith('/')) {
-            relativePath = '/' + relativePath;
+      const getRelativePath = (absolutePath: string) => {
+        const uploadsRoot = path.join(process.cwd(), 'uploads');
+        let relativePath = path.relative(uploadsRoot, absolutePath);
+        relativePath = relativePath.split(path.sep).join('/');
+        // Ensure it starts with /
+        if (!relativePath.startsWith('/')) {
+          relativePath = '/' + relativePath;
+        }
+        return relativePath;
+      };
+
+      // Helper to ensure field is an array and append new items
+      const normalizeAndAppend = (
+        fieldName: string,
+        newItems: string[] = []
+      ) => {
+        let existing = req.body[fieldName];
+        if (existing) {
+          if (!Array.isArray(existing)) {
+            existing = [existing];
           }
-          return relativePath;
-        };
+        } else {
+          existing = [];
+        }
+        req.body[fieldName] = [...existing, ...newItems];
+      };
 
+      // Ensure fields are arrays even if no files (fixes Zod validation for single links)
+      normalizeAndAppend('images');
+      normalizeAndAppend('medias');
+      normalizeAndAppend('pdfs');
+
+      if (files) {
         if (files.coverImage && files.coverImage[0]) {
           req.body.coverImage = getRelativePath(files.coverImage[0].path);
         }
         if (files.images && files.images.length > 0) {
-          req.body.images = files.images.map(file =>
-            getRelativePath(file.path)
+          normalizeAndAppend(
+            'images',
+            files.images.map(file => getRelativePath(file.path))
           );
         }
         if (files.medias && files.medias.length > 0) {
-          req.body.medias = files.medias.map(file =>
-            getRelativePath(file.path)
+          normalizeAndAppend(
+            'medias',
+            files.medias.map(file => getRelativePath(file.path))
           );
         }
         if (files.pdfs && files.pdfs.length > 0) {
-          req.body.pdfs = files.pdfs.map(file => getRelativePath(file.path));
+          normalizeAndAppend(
+            'pdfs',
+            files.pdfs.map(file => getRelativePath(file.path))
+          );
         }
       }
       next();
