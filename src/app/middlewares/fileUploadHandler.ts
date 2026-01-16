@@ -102,6 +102,9 @@ const fileUploadHandler = (customName?: string) => {
       if (
         file.mimetype === 'image/jpeg' ||
         file.mimetype === 'image/png' ||
+        file.mimetype === 'image/webp' ||
+        file.mimetype === 'image/gif' ||
+        file.mimetype === 'image/bmp' ||
         file.mimetype === 'image/jpg'
       ) {
         cb(null, true);
