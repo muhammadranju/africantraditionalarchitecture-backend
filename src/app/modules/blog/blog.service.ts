@@ -3,6 +3,8 @@ import { IBlog } from './blog.interface';
 import { BlogModel } from './blog.model';
 import { nanoid } from 'nanoid';
 import Comment from '../comments/comments.model';
+import ApiError from '../../../errors/ApiError';
+import unlinkFile from '../../../shared/unlinkFile';
 
 const createBlogServiceToDB = async (blogData: IBlog, user: string) => {
   blogData.author = user;
@@ -49,7 +51,17 @@ const getSingleBlogServiceToDB = async (slug: string) => {
 };
 
 const updateBlogServiceToDB = async (id: string, blogData: IBlog) => {
-  const result = await BlogModel.findByIdAndUpdate(id, blogData, {
+  const findBlog = await BlogModel.findById(id);
+
+  if (!findBlog) {
+    throw new ApiError(404, 'Blog not found');
+  }
+
+  if (blogData.image) {
+    unlinkFile(findBlog.image);
+  }
+
+  const result = await BlogModel.findOneAndUpdate({ _id: id }, blogData, {
     new: true,
   });
   return result;
