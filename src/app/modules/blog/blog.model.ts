@@ -11,6 +11,10 @@ const blogSchema = new mongoose.Schema<IBlog>(
       type: String,
       required: true,
     },
+    shortDescription: {
+      type: String,
+      required: true,
+    },
     image: {
       type: String,
       required: true,

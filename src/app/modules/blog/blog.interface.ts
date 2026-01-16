@@ -2,6 +2,7 @@ export interface IBlog {
   title: string;
   description: string;
   image: string;
+  shortDescription: string;
   author: any;
   category: string;
   tags: string[];

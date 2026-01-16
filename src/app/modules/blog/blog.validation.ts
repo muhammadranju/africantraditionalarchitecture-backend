@@ -9,12 +9,14 @@ const blogValidation = {
       description: z.string({
         required_error: 'Description is required',
       }),
-      image: z.array(z.string()).min(1, 'At least one image is required'),
+      image: z.string({
+        required_error: 'Image is required',
+      }),
 
       category: z.string({
         required_error: 'Category is required',
       }),
-      //   tags: z.array(z.string()).min(1, 'At least one tag is required'),
+      tags: z.array(z.string()).min(1, 'At least one tag is required'),
     }),
   }),
 };
