@@ -58,14 +58,7 @@ app.use('/api/v1', router);
 
 //live response
 app.get('/', (req: Request, res: Response) => {
-  console.log(req.ip);
-  const date = new Date(Date.now());
   res.redirect('https://www.africantraditionalarchitecture.com');
-  // res.send(
-  //   `<h1 style="text-align:center; color:#173616; font-family:Verdana;">Beep-beep! The server is alive and kicking.</h1>
-  //   <p style="text-align:center; color:#173616; font-family:Verdana;">${date}</p>
-  //   `
-  // );
 });
 
 //global error handle
@@ -86,3 +79,6 @@ app.use((req, res) => {
 });
 
 export default app;
+
+// Developed by Muhammad Ranju
+// Website: https://mdranju.vercel.app
