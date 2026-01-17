@@ -2,7 +2,7 @@
 
 **African Traditional Architecture Backend** is a **modern, scalable backend API** built with **TypeScript, Node.js, Express, and MongoDB** — designed to power projects related to _African traditional architecture_ (e.g., digital archives, educational platforms, cultural heritage apps, etc.). This boilerplate accelerates backend development with ready-to-use features such as authentication, file handling, logging, and secure APIs.
 
-> 💡 Although this repository currently has a basic template README, this version expands on purpose, features, and usage — making it easier for contributors and users to understand and work with the project.
+> Although this repository currently has a basic template README, this version expands on purpose, features, and usage — making it easier for contributors and users to understand and work with the project.
 
 ---
 
