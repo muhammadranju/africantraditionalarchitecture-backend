@@ -12,12 +12,12 @@ passport.use(
       try {
         // We don't need to do much here, we'll handle the login in the controller
         // but passport requires we call done
-        return done(null, profile);
+        return done(null, profile as any);
       } catch (error) {
         return done(error as Error);
       }
-    }
-  )
+    },
+  ),
 );
 
 // Passport serialize/deserialize are required for sessions,

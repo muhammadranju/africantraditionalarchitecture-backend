@@ -9,7 +9,11 @@ const createBlog = catchAsync(async (req: Request, res: Response) => {
   if (Array.isArray(blogData.image) && blogData.image.length > 0) {
     blogData.image = blogData.image[0];
   }
-  const user = req.user.id;
+  const user = req.user?.id;
+
+  if (!user) {
+    throw new Error('User not found');
+  }
   const result = await BlogService.createBlogServiceToDB(blogData, user);
 
   sendResponse(res, {
@@ -47,7 +51,7 @@ const getSingleBlog = catchAsync(async (req: Request, res: Response) => {
 const updateBlog = catchAsync(async (req: Request, res: Response) => {
   const result = await BlogService.updateBlogServiceToDB(
     req.params.id,
-    req.body
+    req.body,
   );
   sendResponse(res, {
     statusCode: 200,

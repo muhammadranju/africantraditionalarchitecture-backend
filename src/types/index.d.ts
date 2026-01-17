@@ -8,8 +8,9 @@ export type TUser = {
 
 declare global {
   namespace Express {
+    interface User extends TUser {}
     interface Request {
-      user: TUser;
+      user?: User;
     }
   }
 }
