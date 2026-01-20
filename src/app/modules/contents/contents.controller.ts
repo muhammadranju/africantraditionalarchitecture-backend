@@ -9,6 +9,10 @@ import { TUser } from '../../../types';
 const createContent = catchAsync(async (req: Request, res: Response) => {
   const { ...contentData } = req.body;
 
+  if (contentData.stepByStep && typeof contentData.stepByStep === 'string') {
+    contentData.stepByStep = JSON.parse(contentData.stepByStep);
+  }
+
   const user = req.user;
   const result = await ContentService.createContentToDB(contentData, user);
   sendResponse(res, {
@@ -115,7 +119,7 @@ const getContentsByUser = catchAsync(async (req: Request, res: Response) => {
     {
       limit,
       page,
-    }
+    },
   );
 
   const totalPages = Math.ceil(total / limit);

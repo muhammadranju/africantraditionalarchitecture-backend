@@ -1,8 +1,7 @@
 import mongoose, { Schema } from 'mongoose';
-import { IContents, IRegionEnum, StatusEnum } from './contents.interface';
-import { CategoryEnum } from '../forums/forums.interface';
-import slugify from 'slugify';
 import { nanoid } from 'nanoid';
+import slugify from 'slugify';
+import { IContents, IRegionEnum, StatusEnum } from './contents.interface';
 
 const ContentsSchema = new Schema<IContents>(
   {
@@ -69,10 +68,23 @@ const ContentsSchema = new Schema<IContents>(
     slug: {
       type: String,
     },
+
+    stepByStep: [
+      {
+        title: {
+          type: String,
+          default: null,
+        },
+        value: {
+          type: [String],
+          default: null,
+        },
+      },
+    ],
   },
   {
     timestamps: true,
-  }
+  },
 );
 
 ContentsSchema.pre('save', async function (next) {

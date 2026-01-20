@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { StatusCodes } from 'http-status-codes';
 import ApiError from '../../../errors/ApiError';
+import Comment from '../comments/comments.model';
+import { User } from '../user/user.model';
 import { IContents } from './contents.interface';
 import Contents from './contents.model';
-import { User } from '../user/user.model';
-import Comment from '../comments/comments.model';
 
 const createContentToDB = async (contentData: IContents, userId: any) => {
   const contentDataWithUser = {
@@ -46,7 +46,7 @@ const getContentsToDB = async ({ limit, page }: any) => {
 const getContentByIdToDB = async (slug: string) => {
   const result = await Contents.findOne({ slug }).populate(
     'owner',
-    'name role email image'
+    'name role email image',
   );
   const comments = await Comment.find({ type: 'contents' })
     .sort({ createdAt: -1 })
@@ -55,7 +55,7 @@ const getContentByIdToDB = async (slug: string) => {
   const commentsByContents = comments.filter(
     content =>
       content.type === 'contents' &&
-      content?.content?.toString() === result?._id.toString()
+      content?.content?.toString() === result?._id.toString(),
   );
 
   return { result, commentsByContents };
@@ -91,7 +91,7 @@ const deleteContentToDB = async (id: string) => {
 // service
 const getContentsByUserToDB = async (
   user: string,
-  { limit, page }: { limit: number; page: number }
+  { limit, page }: { limit: number; page: number },
 ) => {
   // Count total documents for this user
   const total = await Contents.countDocuments({ owner: user });

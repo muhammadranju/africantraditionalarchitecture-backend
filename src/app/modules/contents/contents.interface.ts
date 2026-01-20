@@ -25,6 +25,10 @@ export interface IContents extends mongoose.Document {
   status: StatusEnum;
   region: IRegionEnum;
   slug: string;
+  stepByStep: {
+    title: string;
+    value: string[];
+  }[];
 }
 
 export enum StatusEnum {
