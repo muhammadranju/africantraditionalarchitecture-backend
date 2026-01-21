@@ -16,7 +16,7 @@ const blogValidation = {
       category: z.string({
         required_error: 'Category is required',
       }),
-      tags: z.array(z.string()).min(1, 'At least one tag is required'),
+      // tags: z.array(z.string()).min(1, 'At least one tag is required'),
     }),
   }),
 };

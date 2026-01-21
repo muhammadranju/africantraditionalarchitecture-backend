@@ -33,7 +33,7 @@ const getAllBlogServiceToDB = async ({
 const getSingleBlogServiceToDB = async (slug: string) => {
   const result = await BlogModel.findOne({ slug: slug }).populate(
     'author',
-    'name email image website verified createdAt'
+    'name email image website verified createdAt',
   );
 
   /*
