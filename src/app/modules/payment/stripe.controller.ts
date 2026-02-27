@@ -198,3 +198,36 @@ export const getDonations = catchAsync(async (req: Request, res: Response) => {
     },
   });
 });
+
+export const deleteDonation = catchAsync(
+  async (req: Request, res: Response) => {
+    const { id } = req.params;
+
+    if (!id || typeof id !== 'string') {
+      return res.status(StatusCodes.BAD_REQUEST).json({
+        success: false,
+        statusCode: StatusCodes.BAD_REQUEST,
+        message: 'id query parameter is required',
+      });
+    }
+
+    const donation = await DonationModel.findOneAndDelete({ _id: id });
+
+    if (!donation) {
+      return res.status(StatusCodes.NOT_FOUND).json({
+        success: false,
+        statusCode: StatusCodes.NOT_FOUND,
+        message: 'Donation record not found',
+      });
+    }
+
+    sendResponse(res, {
+      success: true,
+      statusCode: StatusCodes.OK,
+      message: 'Donation deleted successfully',
+      data: {
+        donationId: donation._id,
+      },
+    });
+  },
+);

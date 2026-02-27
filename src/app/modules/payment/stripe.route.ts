@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import {
   createPaymentLink,
+  deleteDonation,
   getDonations,
   verifyPayment,
 } from './stripe.controller';
@@ -13,5 +14,10 @@ router.post('/create-payment-link', createPaymentLink);
 // Public endpoint — called by the frontend on the success/cancel redirect page
 router.get('/verify-payment', verifyPayment);
 router.get('/', auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN), getDonations);
+router.delete(
+  '/:id',
+  auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN),
+  deleteDonation,
+);
 
 export const paymentRouter = router;
