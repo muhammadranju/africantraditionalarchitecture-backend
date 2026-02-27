@@ -16,7 +16,7 @@ export interface IDonation extends Document {
 
   stripeSessionId?: string;
 
-  paymentStatus?: string;
+  paymentStatus?: 'pending' | 'success' | 'failed' | 'cancelled';
 }
 
 export interface IDonationInput {
@@ -30,5 +30,5 @@ export interface IDonationInput {
   description: string;
   amount: number;
   stripeSessionId: string;
-  paymentStatus?: string;
+  paymentStatus?: 'pending' | 'success' | 'failed' | 'cancelled';
 }

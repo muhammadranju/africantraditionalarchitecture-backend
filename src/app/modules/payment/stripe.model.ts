@@ -12,12 +12,16 @@ const donationSchema = new Schema<IDonation>(
     amount: { type: Number, required: true },
     description: String,
     stripeSessionId: String,
-    paymentStatus: { type: String, default: 'paid' },
+    paymentStatus: {
+      type: String,
+      enum: ['pending', 'success', 'failed', 'cancelled'],
+      default: 'pending',
+    },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 export const DonationModel = mongoose.model<IDonation>(
   'Donation',
-  donationSchema
+  donationSchema,
 );
