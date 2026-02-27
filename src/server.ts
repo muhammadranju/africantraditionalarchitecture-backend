@@ -10,6 +10,7 @@ import config from './config';
 import { seedSuperAdmin } from './DB/seedAdmin';
 import { socketHelper } from './helpers/socketHelper';
 import { errorLogger, logger } from './shared/logger';
+import paymentExpirationJob from './app/modules/payment/payment.cron';
 
 //uncaught exception
 process.on('uncaughtException', error => {
@@ -26,12 +27,15 @@ async function main() {
     //Seed Super Admin after database connection is successful
     await seedSuperAdmin();
 
+    // Start background cron jobs
+    paymentExpirationJob();
+
     const port =
       typeof config.port === 'number' ? config.port : Number(config.port);
 
     server = app.listen(port, () => {
       logger.info(
-        colors.yellow(`♻️  Application listening on port:${config.port}`)
+        colors.yellow(`♻️  Application listening on port:${config.port}`),
       );
     });
 
