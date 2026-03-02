@@ -154,10 +154,22 @@ export const verifyPayment = catchAsync(async (req: Request, res: Response) => {
     paymentStatus,
   );
 
+  const isSuccess = paymentStatus === 'success';
+
+  let message = 'Payment status verified';
+  if (paymentStatus === 'pending') {
+    message =
+      'Your payment is still pending. If you just completed it, please wait a moment and refresh.';
+  } else if (paymentStatus === 'cancelled') {
+    message = 'Payment was cancelled or the session expired.';
+  } else if (paymentStatus === 'failed') {
+    message = 'Payment failed. Please try again with a different card.';
+  }
+
   sendResponse(res, {
-    success: true,
-    statusCode: StatusCodes.OK,
-    message: 'Payment status verified',
+    success: isSuccess,
+    statusCode: isSuccess ? StatusCodes.OK : StatusCodes.PAYMENT_REQUIRED,
+    message,
     data: {
       paymentStatus: donation.paymentStatus,
       donationId: donation._id,
