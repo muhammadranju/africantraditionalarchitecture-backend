@@ -63,14 +63,14 @@ const fileUploadHandler = (customName?: string) => {
             } else {
               throw new ApiError(
                 StatusCodes.BAD_REQUEST,
-                'File is not supported'
+                'File is not supported',
               );
             }
             break;
           default:
             throw new ApiError(
               StatusCodes.BAD_REQUEST,
-              'File is not supported'
+              'File is not supported',
             );
         }
       }
@@ -112,8 +112,8 @@ const fileUploadHandler = (customName?: string) => {
         cb(
           new ApiError(
             StatusCodes.BAD_REQUEST,
-            'Only .jpeg, .png, .jpg file supported'
-          )
+            'Only .jpeg, .png, .jpg file supported',
+          ),
         );
       }
     } else if (
@@ -128,8 +128,8 @@ const fileUploadHandler = (customName?: string) => {
         cb(
           new ApiError(
             StatusCodes.BAD_REQUEST,
-            'Only .mp4, .mp3, file supported'
-          )
+            'Only .mp4, .mp3, file supported',
+          ),
         );
       }
     } else if (
@@ -154,16 +154,16 @@ const fileUploadHandler = (customName?: string) => {
       fileSize: Infinity,
     },
   }).fields([
-    { name: 'image', maxCount: 50 },
-    { name: 'media', maxCount: 50 },
-    { name: 'doc', maxCount: 50 },
+    { name: 'image', maxCount: 500 },
+    { name: 'media', maxCount: 500 },
+    { name: 'doc', maxCount: 500 },
     { name: 'coverImage', maxCount: 1 },
-    { name: 'images', maxCount: 50 },
-    { name: 'medias', maxCount: 50 },
-    { name: 'pdfs', maxCount: 50 },
-    { name: 'pdf', maxCount: 50 },
-    { name: 'video', maxCount: 50 },
-    { name: 'videos', maxCount: 50 },
+    { name: 'images', maxCount: 500 },
+    { name: 'medias', maxCount: 500 },
+    { name: 'pdfs', maxCount: 500 },
+    { name: 'pdf', maxCount: 500 },
+    { name: 'video', maxCount: 500 },
+    { name: 'videos', maxCount: 500 },
     { name: 'icon', maxCount: 1 },
   ]);
   return upload;

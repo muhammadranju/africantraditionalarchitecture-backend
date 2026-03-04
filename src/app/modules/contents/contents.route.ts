@@ -15,7 +15,7 @@ router
   .get(ContentController.getContents)
   .post(
     fileUploadHandler(),
-    checkImagesModeration, // ✅ Moderation middleware added here
+    // checkImagesModeration, // ✅ Moderation middleware added here
     (req: Request, res: Response, next: NextFunction) => {
       const files = req.files as {
         [fieldname: string]: Express.Multer.File[];
@@ -35,7 +35,7 @@ router
       // Helper to ensure field is an array and append new items
       const normalizeAndAppend = (
         fieldName: string,
-        newItems: string[] = []
+        newItems: string[] = [],
       ) => {
         let existing = req.body[fieldName];
         if (existing) {
@@ -60,19 +60,19 @@ router
         if (files.images && files.images.length > 0) {
           normalizeAndAppend(
             'images',
-            files.images.map(file => getRelativePath(file.path))
+            files.images.map(file => getRelativePath(file.path)),
           );
         }
         if (files.medias && files.medias.length > 0) {
           normalizeAndAppend(
             'medias',
-            files.medias.map(file => getRelativePath(file.path))
+            files.medias.map(file => getRelativePath(file.path)),
           );
         }
         if (files.pdfs && files.pdfs.length > 0) {
           normalizeAndAppend(
             'pdfs',
-            files.pdfs.map(file => getRelativePath(file.path))
+            files.pdfs.map(file => getRelativePath(file.path)),
           );
         }
       }
@@ -80,7 +80,7 @@ router
     },
     validateRequest(ContentValidation.createContentZodSchema),
     auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN, USER_ROLES.USER),
-    ContentController.createContent
+    ContentController.createContent,
   );
 
 router.route('/all-contents').get(ContentController.getAllContents);
@@ -93,7 +93,7 @@ router
   .route('/users')
   .get(
     auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN, USER_ROLES.USER),
-    ContentController.getContentsByUser
+    ContentController.getContentsByUser,
   );
 
 router
@@ -101,11 +101,11 @@ router
   .get(ContentController.getContentById)
   .patch(
     auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN, USER_ROLES.USER),
-    ContentController.updateContent
+    ContentController.updateContent,
   )
   .delete(
     auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN, USER_ROLES.USER),
-    ContentController.deleteContent
+    ContentController.deleteContent,
   );
 
 export const ContentRoutes = router;
